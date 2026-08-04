@@ -63,6 +63,10 @@ export async function POST(req: NextRequest) {
       success_url: `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/checkout`,
       invoice_creation: { enabled: true },
+      // The licence agreements name the Licensee's address on their first
+      // line, so it has to be captured at purchase — there is no later
+      // opportunity to ask.
+      billing_address_collection: "required",
     });
 
     if (!session.url) {

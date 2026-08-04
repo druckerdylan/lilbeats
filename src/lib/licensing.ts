@@ -1,12 +1,18 @@
 import { LicenseTier } from "@/lib/types";
+import { rightsRowsFor } from "@/lib/contracts/config";
 
 /**
  * Central pricing config — every beat card, product page, licensing page and
  * checkout flow reads from this file.
  *
- * Prices are absolute per tier and identical across the catalogue (this is
- * how the BeatStars storefront is priced), rather than multipliers applied
- * to a per-beat base. Change a number here and it changes everywhere.
+ * Prices are absolute per tier and identical across the catalogue, rather
+ * than multipliers applied to a per-beat base.
+ *
+ * The rights rows (distribution, streams, videos, radio, performances) are
+ * NOT written here. They come from `contracts/config.ts`, which is also what
+ * generates the binding licence agreement — so the limits a buyer reads on
+ * the pricing page are by construction the same ones their contract grants.
+ * They previously diverged: this file shipped with invented caps.
  */
 export const LICENSE_TIERS: LicenseTier[] = [
   {
@@ -16,14 +22,11 @@ export const LICENSE_TIERS: LicenseTier[] = [
     description: "Instant MP3 download for demos, mixtapes, and independent releases.",
     features: [
       "Untagged MP3 (320kbps)",
-      "Commercial use rights",
+      "Used for music recording",
+      "For-profit live performances",
       "Instant digital delivery",
     ],
-    distributionLimit: "Up to 2,500 units / copies",
-    streamLimit: "Up to 250,000 audio streams",
-    musicVideos: "1 official music video",
-    radioBroadcast: "Non-commercial radio only",
-    performances: "Non-profit live performances",
+    ...rightsRowsFor("mp3"),
     price: 15,
   },
   {
@@ -33,15 +36,12 @@ export const LICENSE_TIERS: LicenseTier[] = [
     description: "Studio-quality WAV alongside the MP3, for higher-fidelity mixing and release.",
     features: [
       "Untagged WAV (24-bit) + MP3",
-      "Commercial use rights",
-      "Higher streaming & distribution limits",
+      "Used for music recording",
+      "Five times the distribution limit of the MP3 lease",
+      "For-profit live performances",
       "Instant digital delivery",
     ],
-    distributionLimit: "Up to 10,000 units / copies",
-    streamLimit: "Up to 1,000,000 audio streams",
-    musicVideos: "2 official music videos",
-    radioBroadcast: "Limited commercial radio",
-    performances: "For-profit live performances",
+    ...rightsRowsFor("wav"),
     price: 20,
   },
   {
@@ -55,14 +55,10 @@ export const LICENSE_TIERS: LicenseTier[] = [
       "Individual trackout stems (ZIP)",
       "Unlimited distribution & streaming",
       "Unlimited music videos",
-      "For-profit live performances",
+      "Radio broadcasting on unlimited stations",
       "Instant digital delivery",
     ],
-    distributionLimit: "Unlimited units / copies",
-    streamLimit: "Unlimited audio streams",
-    musicVideos: "Unlimited music videos",
-    radioBroadcast: "Unlimited radio broadcasting",
-    performances: "For-profit live performances",
+    ...rightsRowsFor("unlimited"),
     price: 40,
   },
   {
@@ -78,11 +74,7 @@ export const LICENSE_TIERS: LicenseTier[] = [
       "Exclusive rights — beat removed from sale",
       "Instant digital delivery",
     ],
-    distributionLimit: "Distribute up to UNLIMITED copies",
-    streamLimit: "UNLIMITED online audio streams",
-    musicVideos: "UNLIMITED music videos",
-    radioBroadcast: "Radio broadcasting rights (UNLIMITED stations)",
-    performances: "For-profit live performances",
+    ...rightsRowsFor("exclusive"),
     price: 140,
     exclusive: true,
   },
@@ -93,8 +85,8 @@ export function getLicenseTier(id: string): LicenseTier | undefined {
 }
 
 /**
- * Price for a licence tier. Takes only the tier id — pricing is no longer
- * derived from a per-beat base price.
+ * Price for a licence tier. Takes only the tier id — pricing is not derived
+ * from a per-beat base price.
  */
 export function priceForLicense(licenseId: string): number {
   return getLicenseTier(licenseId)?.price ?? 0;
@@ -111,8 +103,7 @@ export function lowestPriceFor(licenseAvailability: string[]): number {
 /**
  * Shown where exclusive rights are discussed but not directly purchasable —
  * the licensing page's closing section, and the enquiry dialog on beats that
- * don't carry the exclusive tier. It must not imply exclusivity is
- * enquiry-only, because on most beats it is a normal $140 checkout.
+ * don't carry the exclusive tier.
  */
 export const EXCLUSIVE_LICENSE_NOTE =
   "The exclusive licence transfers full rights, includes the trackout stems, and retires the beat from the store the moment it sells. Where it isn't listed on a beat, get in touch and we'll sort it out directly.";

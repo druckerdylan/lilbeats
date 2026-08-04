@@ -56,6 +56,9 @@ create table if not exists public.orders (
   stripe_session_id text unique not null,
   customer_email text not null,
   customer_name text,
+  -- Needed by the licence agreements, which name the Licensee's address on
+  -- their first line ("residing at ..."). Collected by Stripe Checkout.
+  customer_address text,
   amount_total numeric(10, 2) not null default 0,
   currency text not null default 'usd',
   status text not null default 'pending' check (status in ('pending', 'paid', 'refunded')),

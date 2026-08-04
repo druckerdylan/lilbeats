@@ -46,6 +46,7 @@ export interface Database {
           stripe_session_id: string;
           customer_email: string;
           customer_name: string | null;
+          customer_address: string | null;
           amount_total: number;
           currency: string;
           status: "pending" | "paid" | "refunded";

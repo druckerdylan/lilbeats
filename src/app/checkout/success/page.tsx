@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fragment } from "react";
 import Link from "next/link";
 import Stripe from "stripe";
-import { CircleCheck, Download } from "lucide-react";
+import { CircleCheck, Download, FileText } from "lucide-react";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured, getBeatFileLocation } from "@/lib/beats-repo";
@@ -24,13 +24,20 @@ interface PurchasedItem {
   licenseName: string;
   price: number;
   downloadHref: string | null;
+  /** The buyer's licence agreement. Null when no token exists yet. */
+  contractHref: string | null;
 }
 
-async function getDownloadHref(
+/**
+ * Resolves both links for a purchased line item. They share one token: the
+ * download serves the file, the contract renders the agreement for the same
+ * order item.
+ */
+async function getItemLinks(
   orderIdBySession: string | null,
   beatId: string,
   licenseId: string
-): Promise<string | null> {
+): Promise<{ downloadHref: string | null; contractHref: string | null }> {
   if (isSupabaseConfigured() && orderIdBySession) {
     const supabase = createAdminClient();
     const { data } = await supabase
@@ -40,11 +47,18 @@ async function getDownloadHref(
       .eq("beat_id", beatId)
       .eq("license_id", licenseId)
       .maybeSingle();
-    return data ? `/api/download/${data.token}` : null;
+    return data
+      ? { downloadHref: `/api/download/${data.token}`, contractHref: `/contracts/${data.token}` }
+      : { downloadHref: null, contractHref: null };
   }
 
+  // Unconfigured environment: the local sample file is servable, but there is
+  // no order behind it, so no agreement can be issued.
   const location = await getBeatFileLocation(beatId, licenseId);
-  return location?.isLocal ? location.path : null;
+  return {
+    downloadHref: location?.isLocal ? location.path : null,
+    contractHref: null,
+  };
 }
 
 /** Shared shell for the two dead-end states, so they still feel art-directed. */
@@ -155,7 +169,7 @@ export default async function CheckoutSuccessPage({
         licenseId,
         licenseName: product.metadata.licenseName ?? "License",
         price: (line.amount_total ?? 0) / 100,
-        downloadHref: await getDownloadHref(orderId, beatId, licenseId),
+        ...(await getItemLinks(orderId, beatId, licenseId)),
       };
     })
   );
@@ -249,6 +263,17 @@ export default async function CheckoutSuccessPage({
                   </Button>
                 ) : (
                   <span className="u-meta shrink-0 text-smoke">Preparing file…</span>
+                )}
+                {item.contractHref && (
+                  <Button
+                    variant="cinemaGhost"
+                    size="cinemaSm"
+                    className="w-full shrink-0 sm:w-auto"
+                    render={<a href={item.contractHref} />}
+                  >
+                    <FileText aria-hidden />
+                    Licence
+                  </Button>
                 )}
               </div>
             </RevealItem>
