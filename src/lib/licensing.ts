@@ -6,7 +6,9 @@ import { rightsRowsFor } from "@/lib/contracts/config";
  * checkout flow reads from this file.
  *
  * Prices are absolute per tier and identical across the catalogue, rather
- * than multipliers applied to a per-beat base.
+ * than multipliers applied to a per-beat base. Names and amounts mirror the
+ * producer's BeatStars storefront so a buyer sees the same four products in
+ * both places.
  *
  * The rights rows (distribution, streams, videos, radio, performances) are
  * NOT written here. They come from `contracts/config.ts`, which is also what
@@ -17,7 +19,7 @@ import { rightsRowsFor } from "@/lib/contracts/config";
 export const LICENSE_TIERS: LicenseTier[] = [
   {
     id: "mp3",
-    name: "MP3 Lease",
+    name: "MP3 License",
     formatLabel: "MP3",
     description: "Instant MP3 download for demos, mixtapes, and independent releases.",
     features: [
@@ -31,13 +33,13 @@ export const LICENSE_TIERS: LicenseTier[] = [
   },
   {
     id: "wav",
-    name: "MP3 + WAV",
+    name: "Premium License",
     formatLabel: "MP3 + WAV",
     description: "Studio-quality WAV alongside the MP3, for higher-fidelity mixing and release.",
     features: [
       "Untagged WAV (24-bit) + MP3",
       "Used for music recording",
-      "Five times the distribution limit of the MP3 lease",
+      "Five times the distribution limit of the MP3 licence",
       "For-profit live performances",
       "Instant digital delivery",
     ],
@@ -46,7 +48,7 @@ export const LICENSE_TIERS: LicenseTier[] = [
   },
   {
     id: "unlimited",
-    name: "Unlimited",
+    name: "Unlimited License",
     formatLabel: "MP3 + WAV + Stems",
     description:
       "Every non-exclusive cap removed, with the trackout stems included — unlimited sales, streams, videos, and radio.",
@@ -59,7 +61,7 @@ export const LICENSE_TIERS: LicenseTier[] = [
       "Instant digital delivery",
     ],
     ...rightsRowsFor("unlimited"),
-    price: 40,
+    price: 35,
   },
   {
     id: "exclusive",

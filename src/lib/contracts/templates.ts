@@ -26,7 +26,7 @@
 const PLATFORM_CLAUSE = `By using the Service, both parties acknowledge and accept the {SITE_NAME} Terms of Service ({SITE_URL}/terms) and Privacy Policy ({SITE_URL}/privacy) and consent to the collection and use of data in accordance with that Privacy Policy. The parties acknowledge that this Agreement was entered into via the platform located at {SITE_URL}, which is operated by Licensor. Neither this Agreement nor any form or template used to generate it is a substitute for the advice or services of an attorney, and no attorney-client relationship or privilege is created by using or accessing the site.`;
 
 /**
- * MP3 Lease and MP3 + WAV. Identical text in the originals; the tier is
+ * MP3 License and Premium License. Identical text in the originals; the tier is
  * carried by {LICENSE_NAME}, {FILE_TYPE}, {PRODUCT_PRICE} and the caps.
  */
 export const STANDARD_NON_EXCLUSIVE = `This Non-Exclusive {LICENSE_NAME} License Agreement (the "Agreement"), having been made on and effective as of {CONTRACT_DATE} (the "Effective Date") by and between {PRODUCT_OWNER_FULLNAME} p/k/a {PRODUCER_ALIAS} (the "Producer" or "Licensor"); and {CUSTOMER_FULLNAME} residing at {CUSTOMER_ADDRESS} ("You" or "Licensee"), sets forth the terms and conditions of the Licensee's use, and the rights granted in, the Producer's instrumental music file entitled {PRODUCT_TITLE} (the "Beat") in consideration for Licensee's payment of {PRODUCT_PRICE} (the "License Fee"), on a so-called "{LICENSE_NAME}" basis.
