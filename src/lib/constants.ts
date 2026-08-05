@@ -5,9 +5,6 @@ export const BRAND = {
   tagline: "Dark Production. Clean Mixes. Records That Hit.",
   email: "contact@lilbeats.com",
   supportEmail: "support@lilbeats.com",
-  // The "+1" is kept so the contact page's `tel:` link resolves to a fully
-  // qualified number rather than a bare 10-digit string.
-  phone: "+1 (202) 770-5530",
   location: "Washington, D.C.",
   hours: "Mon – Fri, 9am – 6pm ET",
   responseTime: "Within 24–48 hours",
@@ -15,7 +12,7 @@ export const BRAND = {
 
 export const SOCIAL_LINKS = {
   instagram: "https://instagram.com/lilbeats",
-  youtube: "https://youtube.com/@lilbeats",
+  youtube: "https://youtube.com/@lilbeats-h1x",
   tiktok: "https://tiktok.com/@lilbeats",
   soundcloud: "https://soundcloud.com/lilbeats",
   beatstars: "https://beatstars.com/lilbeats",

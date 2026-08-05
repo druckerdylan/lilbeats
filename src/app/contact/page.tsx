@@ -39,17 +39,6 @@ const DETAIL_ROWS: { label: string; value: React.ReactNode }[] = [
       </a>
     ),
   },
-  {
-    label: "Phone",
-    value: (
-      <a
-        href={`tel:${BRAND.phone.replace(/[^\d+]/g, "")}`}
-        className="transition-colors duration-300 hover:text-ember"
-      >
-        {BRAND.phone}
-      </a>
-    ),
-  },
   { label: "Location", value: BRAND.location },
   { label: "Hours", value: BRAND.hours },
   { label: "Response", value: BRAND.responseTime },
