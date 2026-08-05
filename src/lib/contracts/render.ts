@@ -108,7 +108,7 @@ export function renderContract(subject: ContractSubject): ContractResult {
     CUSTOMER_FULLNAME: subject.customerName,
     CUSTOMER_ADDRESS: subject.customerAddress,
 
-    TERM_YEARS: rights.termYears,
+    TERM_CLAUSE: rights.termClause,
     PERFORMANCES_FOR_PROFIT: rights.performancesForProfit,
     PERFORMANCES_NOT_FOR_PROFIT: rights.performancesNotForProfit,
     NUMBER_OF_RADIO_STATIONS: rights.radioStations,

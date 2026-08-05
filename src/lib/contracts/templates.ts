@@ -136,7 +136,7 @@ Licensor shall use commercially reasonable efforts to deliver the Track to Licen
 
 TERM:
 
-The Term of this Agreement shall be {TERM_YEARS} years and this license shall expire on the {TERM_YEARS} year anniversary of the {CONTRACT_DATE}.
+{TERM_CLAUSE}
 
 USE OF THE TRACK:
 

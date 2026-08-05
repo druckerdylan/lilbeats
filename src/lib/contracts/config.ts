@@ -32,8 +32,16 @@ export interface TierRights {
   performancesNotForProfit: string;
   /** {PUBLISHING_SHARES} / {PUBLISHING_RIGHTS} */
   publishingShares: string;
-  /** {TERM_YEARS} — licence length. */
-  termYears: string | null;
+  /**
+   * {TERM_CLAUSE} — the whole Term sentence, not just a number.
+   *
+   * The original read "shall be {TERM_YEARS} years and shall expire on the
+   * {TERM_YEARS} year anniversary", which cannot express a perpetual licence:
+   * substituting "unlimited" produces "expire on the unlimited year
+   * anniversary". Carrying the full sentence lets a fixed term and a
+   * perpetual one both read correctly.
+   */
+  termClause: string | null;
 
   // ── Not yet specified ──────────────────────────────────────────────────
   /** {MONETIZED_VIDEO_STREAMS_ALLOWED} */
@@ -79,7 +87,8 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     radioStations: "two (2)",
     ...PERFORMANCE_GRANT,
     publishingShares: PUBLISHING_50_50,
-    termYears: "ten (10)",
+    termClause:
+      "The Term of this Agreement shall be ten (10) years and this license shall expire on the ten (10) year anniversary of the Effective Date.",
     monetizedVideoStreams: null,
     nonMonetizedVideoStreams: null,
     freeDownloads: null,
@@ -93,7 +102,8 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     radioStations: "two (2)",
     ...PERFORMANCE_GRANT,
     publishingShares: PUBLISHING_50_50,
-    termYears: "ten (10)",
+    termClause:
+      "The Term of this Agreement shall be ten (10) years and this license shall expire on the ten (10) year anniversary of the Effective Date.",
     monetizedVideoStreams: null,
     nonMonetizedVideoStreams: null,
     freeDownloads: null,
@@ -107,7 +117,10 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     radioStations: "unlimited",
     ...PERFORMANCE_GRANT,
     publishingShares: PUBLISHING_50_50,
-    termYears: null,
+    // Perpetual: the tier is sold as "Unlimited", and an unlimited licence
+    // that lapses after a fixed term would contradict its own name.
+    termClause:
+      "The Term of this Agreement shall be perpetual and this license shall not expire.",
     monetizedVideoStreams: "unlimited",
     nonMonetizedVideoStreams: "unlimited",
     freeDownloads: "unlimited",
@@ -123,7 +136,9 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     radioStations: "unlimited",
     ...PERFORMANCE_GRANT,
     publishingShares: PUBLISHING_50_50_EXCLUSIVE,
-    termYears: null,
+    // The exclusive agreement assigns in perpetuity in its Rights clause and
+    // carries no Term section, so this is never substituted.
+    termClause: null,
     monetizedVideoStreams: "unlimited",
     nonMonetizedVideoStreams: "unlimited",
     freeDownloads: "unlimited",
@@ -137,7 +152,7 @@ export const PRODUCER_LEGAL = {
    * {PRODUCT_OWNER_FULLNAME} — the producer's full legal name as it would
    * appear on a contract, NOT the brand name. Unknown to this codebase.
    */
-  legalName: null as string | null,
+  legalName: "Dylan Drucker" as string | null,
 
   /** {PRODUCER_ALIAS} — the professional name the beats are released under. */
   alias: "Lil Beats",
@@ -145,11 +160,11 @@ export const PRODUCER_LEGAL = {
   /**
    * {STATE_PROVINCE_COUNTRY} — governing law and exclusive venue. Substituted
    * into both "the laws of the ___" and "courts located in the ___", so it
-   * must read naturally in both (e.g. "District of Columbia"). Left unset
-   * because choosing a jurisdiction is a legal decision, not an address —
-   * the studio being in Washington, D.C. does not settle it.
+   * must read naturally in both. Set to the District of Columbia because
+   * that is where the business operates, which is the usual choice — but it
+   * is a legal decision rather than a mailing address, so confirm it.
    */
-  governingLaw: null as string | null,
+  governingLaw: "District of Columbia" as string | null,
 };
 
 /** Which contract body a tier is issued under. */
