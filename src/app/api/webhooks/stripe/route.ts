@@ -87,6 +87,9 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
     return;
   }
 
+  /** beatId::licenseId -> the buyer's download and licence links. */
+  const linksByItem = new Map<string, { downloadHref: string; contractHref: string }>();
+
   if (isSupabaseConfigured()) {
     const supabase = createAdminClient();
 
@@ -165,12 +168,19 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
         );
       }
 
-      await createDownloadToken({
+      const token = await createDownloadToken({
         orderId: order.id,
         orderItemId: orderItem.id,
         beatId: item.beatId,
         licenseId: item.licenseId,
       });
+      // One token serves both: the file itself and the licence agreement.
+      if (token) {
+        linksByItem.set(`${item.beatId}::${item.licenseId}`, {
+          downloadHref: `${SITE_URL}/api/download/${token}`,
+          contractHref: `${SITE_URL}/contracts/${token}`,
+        });
+      }
 
       /*
         An exclusive licence transfers the beat outright, so it has to leave
@@ -202,7 +212,10 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
   const { subject, html } = orderReceiptEmail({
     orderId: session.id,
     customerName: session.customer_details?.name,
-    items,
+    items: items.map((item) => ({
+      ...item,
+      ...(linksByItem.get(`${item.beatId}::${item.licenseId}`) ?? {}),
+    })),
     amountTotal,
     downloadUrl: `${SITE_URL}/checkout/success?session_id=${session.id}`,
   });

@@ -3,8 +3,14 @@ import { nanoid } from "nanoid";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/beats-repo";
 
-const TOKEN_TTL_DAYS = 7;
-const MAX_DOWNLOADS = 5;
+/*
+  30 days, not 7. These links are how a paying customer receives what they
+  bought, and the receipt email is the only place they exist — a buyer who
+  doesn't open their email for a week would otherwise have to ask for a
+  re-issue. The licence agreement link deliberately never expires.
+*/
+const TOKEN_TTL_DAYS = 30;
+const MAX_DOWNLOADS = 10;
 
 export interface CreateTokenParams {
   orderId: string;

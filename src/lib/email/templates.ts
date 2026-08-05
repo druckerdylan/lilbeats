@@ -37,17 +37,29 @@ function shell(preheader: string, bodyHtml: string): string {
 export function orderReceiptEmail(params: {
   orderId: string;
   customerName?: string | null;
-  items: OrderItemRecord[];
+  items: (OrderItemRecord & { downloadHref?: string | null; contractHref?: string | null })[];
   amountTotal: number;
   downloadUrl: string;
 }): { subject: string; html: string } {
+  /*
+    Files are linked, never attached. A stems archive is 150-200 MB and a WAV
+    around 30 MB, well past the ~25 MB most mail providers accept — an
+    attached receipt would bounce rather than deliver.
+  */
   const rows = params.items
     .map(
       (item) => `
       <tr>
-        <td style="padding:10px 0;border-bottom:1px solid rgba(243,239,231,0.08);">${item.beatTitle}</td>
-        <td style="padding:10px 0;border-bottom:1px solid rgba(243,239,231,0.08);color:#98979c;">${item.licenseName}</td>
-        <td align="right" style="padding:10px 0;border-bottom:1px solid rgba(243,239,231,0.08);">${formatPrice(item.price)}</td>
+        <td style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">
+          <div style="font-weight:600;">${item.beatTitle}</div>
+          <div style="color:#98979c;font-size:13px;padding-top:2px;">${item.licenseName}</div>
+          <div style="padding-top:8px;font-size:13px;">
+            ${item.downloadHref ? `<a href="${item.downloadHref}" style="color:#ff2d47;text-decoration:none;font-weight:600;">Download files</a>` : ""}
+            ${item.downloadHref && item.contractHref ? `<span style="color:#4a4a52;padding:0 8px;">&middot;</span>` : ""}
+            ${item.contractHref ? `<a href="${item.contractHref}" style="color:#98979c;text-decoration:none;">Licence agreement</a>` : ""}
+          </div>
+        </td>
+        <td align="right" valign="top" style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">${formatPrice(item.price)}</td>
       </tr>`
     )
     .join("");
@@ -58,15 +70,15 @@ export function orderReceiptEmail(params: {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
       ${rows}
       <tr>
-        <td style="padding:14px 0 0;" colspan="2"><strong>Total</strong></td>
+        <td style="padding:14px 0 0;"><strong>Total</strong></td>
         <td align="right" style="padding:14px 0 0;"><strong>${formatPrice(params.amountTotal)}</strong></td>
       </tr>
     </table>
     <div style="margin:28px 0;">
       <a href="${params.downloadUrl}" style="display:inline-block;background:#b3122b;color:#f3efe7;padding:12px 22px;border-radius:4px;text-decoration:none;font-weight:600;">Go to your downloads</a>
     </div>
-    <p style="margin:0 0 8px;color:#98979c;font-size:13px;">Download links expire after 7 days and are limited to 5 downloads per file. Save your files locally after purchase.</p>
-    <p style="margin:0;color:#98979c;font-size:13px;">Your license agreement is attached to your download page. Questions? Just reply to this email.</p>
+    <p style="margin:0 0 8px;color:#98979c;font-size:13px;">Download links stay live for 30 days and allow 10 downloads per file — save your files locally once you have them.</p>
+    <p style="margin:0;color:#98979c;font-size:13px;">Your licence agreement stays available permanently at the link beside each track. Questions? Just reply to this email.</p>
   `;
 
   return {

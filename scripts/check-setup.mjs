@@ -37,9 +37,9 @@ const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const admins = process.env.ADMIN_EMAILS;
 
-url ? pass("NEXT_PUBLIC_SUPABASE_URL") : fail("NEXT_PUBLIC_SUPABASE_URL missing", "Settings → API → Project URL");
-anon ? pass("NEXT_PUBLIC_SUPABASE_ANON_KEY") : fail("NEXT_PUBLIC_SUPABASE_ANON_KEY missing", "Settings → API → anon public");
-service ? pass("SUPABASE_SERVICE_ROLE_KEY") : fail("SUPABASE_SERVICE_ROLE_KEY missing", "Settings → API → service_role");
+url ? pass("NEXT_PUBLIC_SUPABASE_URL") : fail("NEXT_PUBLIC_SUPABASE_URL missing", "Connect dialog → Project URL");
+anon ? pass("NEXT_PUBLIC_SUPABASE_ANON_KEY") : fail("NEXT_PUBLIC_SUPABASE_ANON_KEY missing", "Settings → API Keys → publishable (or legacy anon)");
+service ? pass("SUPABASE_SERVICE_ROLE_KEY") : fail("SUPABASE_SERVICE_ROLE_KEY missing", "Settings → API Keys → secret (or legacy service_role)");
 admins ? pass(`ADMIN_EMAILS (${admins.split(",").length} address(es))`)
        : fail("ADMIN_EMAILS missing", "Without it /admin refuses everyone — that is the fail-closed default");
 

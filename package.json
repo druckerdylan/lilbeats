@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check-setup": "node --experimental-websocket --env-file=.env.local scripts/check-setup.mjs",
+    "import-beats": "node --experimental-websocket --env-file=.env.local scripts/import-beats.mjs",
+    "prepare-beats": "node scripts/prepare-beats.mjs",
+    "configure": "node scripts/configure.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
