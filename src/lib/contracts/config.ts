@@ -52,8 +52,6 @@ export interface TierRights {
   freeDownloads: string | null;
   /** {SAMPLES_DEFINITION} — standard tiers only. */
   samplesDefinition?: string | null;
-  /** {ROYALTY_AMOUNT} — exclusive only: producer's share of Net Receipts. */
-  royaltyAmount?: string | null;
 }
 
 /**
@@ -142,7 +140,6 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     monetizedVideoStreams: "unlimited",
     nonMonetizedVideoStreams: "unlimited",
     freeDownloads: "unlimited",
-    royaltyAmount: null,
   },
 };
 

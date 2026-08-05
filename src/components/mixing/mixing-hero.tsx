@@ -55,14 +55,13 @@ export function MixingHero() {
               <SplitWords text="Records That Sound" />
             </span>
             {/* The page's one neon moment: the payoff word burns, the rest of
-                the title stays bone. Colour rides on the word span so the
-                glow class only has to carry the shadow. */}
+                the title stays bone. The neon treatment paints via
+                background-clip, so it has to sit on the word span itself. */}
             <span className="block">
               <SplitWords
                 text="Finished"
                 delay={0.16}
-                className="neon-text-hot"
-                wordClassName="text-ember-bright"
+                wordClassName="neon-text-hot"
               />
             </span>
           </h1>

@@ -552,12 +552,32 @@
       0 0 22px rgba(255, 10, 60, 0.45),
       0 0 60px rgba(255, 10, 60, 0.3);
   }
+  /*
+    A lit tube, not a red sticker. A flat fill plus an outer glow reads as a
+    solid block at display sizes because every glyph is one uniform colour —
+    the eye gets no cue that light is coming *from* the letter.
+
+    So the fill is a gradient: near-white at the top where a tube is hottest,
+    falling through the brand red to a deep ember at the base. `drop-shadow`
+    rather than `text-shadow` because it follows the glyph's alpha instead of
+    its box, so the bloom hugs the letterforms and dissolves into the page.
+  */
   .neon-text-hot {
-    color: var(--ember-bright);
-    text-shadow:
-      0 0 8px rgba(255, 10, 60, 0.9),
-      0 0 30px rgba(255, 10, 60, 0.6),
-      0 0 80px rgba(255, 10, 60, 0.4);
+    color: transparent;
+    background-image: linear-gradient(
+      177deg,
+      #fff3f4 0%,
+      #ff9aa8 18%,
+      #ff4a62 46%,
+      #ff2d47 68%,
+      #b3122b 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    filter:
+      drop-shadow(0 0 7px rgba(255, 45, 71, 0.5))
+      drop-shadow(0 0 26px rgba(255, 10, 60, 0.34))
+      drop-shadow(0 0 72px rgba(194, 20, 47, 0.26));
   }
   .neon-edge {
     box-shadow:

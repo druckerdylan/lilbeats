@@ -133,7 +133,7 @@ export function BeatCard({
             }
             aria-label={isActive && isPlaying ? `Pause ${beat.title}` : `Play ${beat.title} preview`}
             className={cn(
-              "absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100",
+              "absolute inset-0 z-30 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100",
               isActive && "opacity-100"
             )}
           >
@@ -204,9 +204,18 @@ export function BeatCard({
 
         <div className={cn("flex flex-col gap-4", isFeature ? "p-7 sm:p-9" : "flex-1 p-5")}>
           <div>
+            {/*
+              Stretched link: the pseudo-element covers the whole card so any
+              dead space opens the beat, while the title stays the actual
+              anchor for assistive tech and for the URL preview on hover.
+
+              Nesting the card inside an <a> would be invalid — the card
+              already holds a play button, a favourite toggle and an add-to-
+              cart button. Those sit above this layer on z-30 and keep working.
+            */}
             <Link
               href={`/beats/${beat.slug}`}
-              className="block font-display uppercase text-bone transition-colors hover:text-ember"
+              className="block font-display uppercase text-bone transition-colors hover:text-ember after:absolute after:inset-0 after:z-10 after:content-['']"
             >
               <GlitchText
                 text={beat.title}
@@ -274,7 +283,12 @@ export function BeatCard({
                   price: mp3Price,
                 })
               }
-              className={cn(inCart && "bg-gunmetal text-smoke hover:bg-gunmetal hover:shadow-none")}
+              // `relative z-30` lifts it clear of the stretched link that
+              // makes the rest of the card open the beat page.
+              className={cn(
+                "relative z-30",
+                inCart && "bg-gunmetal text-smoke hover:bg-gunmetal hover:shadow-none"
+              )}
             >
               <ShoppingCart />
               {inCart ? "In cart" : "Add"}

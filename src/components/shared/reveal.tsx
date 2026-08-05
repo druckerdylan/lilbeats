@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -159,6 +160,12 @@ export function SplitWords({
 }) {
   const reduced = useReducedMotion();
   const words = text.split(" ");
+  /*
+    The per-word mask has to clip during the reveal, but keeping it after the
+    animation crops anything that paints outside the glyph box — a neon glow
+    gets sheared into a hard rectangle. Released on completion.
+  */
+  const [revealed, setRevealed] = useState(false);
 
   if (reduced) return <span className={className}>{text}</span>;
 
@@ -177,7 +184,10 @@ export function SplitWords({
           // The padding/negative-margin pair gives descenders and the display
           // face's overshoot room inside the mask; without it the clip shaves
           // the bottom off the glyphs.
-          className="inline-block overflow-hidden pb-[0.12em] -mb-[0.12em] align-bottom"
+          className={cn(
+            "inline-block pb-[0.12em] -mb-[0.12em] align-bottom",
+            revealed ? "overflow-visible" : "overflow-hidden"
+          )}
         >
           <motion.span
             className={cn("inline-block", wordClassName)}
@@ -186,6 +196,7 @@ export function SplitWords({
               visible: { y: "0%", opacity: 1 },
             }}
             transition={{ duration: 0.95, ease: EASE }}
+            onAnimationComplete={() => setRevealed(true)}
           >
             {word}
             {i < words.length - 1 ? " " : ""}

@@ -130,8 +130,7 @@ export default function PortfolioPage() {
             <SplitWords
               text="Work"
               delay={0.2}
-              className="neon-text-hot"
-              wordClassName="text-ember-bright"
+              wordClassName="neon-text-hot"
             />
           </h1>
 

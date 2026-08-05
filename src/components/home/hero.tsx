@@ -169,8 +169,9 @@ export function Hero() {
             <SplitWords
               text="Hit."
               delay={0.56}
-              className="neon-text-hot"
-              wordClassName="text-ember-bright"
+              // The treatment has to sit on the word span itself: it paints
+              // via background-clip, which only clips to its own text.
+              wordClassName="neon-text-hot"
             />
           </span>
         </h1>

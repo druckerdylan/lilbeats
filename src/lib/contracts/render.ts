@@ -125,7 +125,6 @@ export function renderContract(subject: ContractSubject): ContractResult {
     PUBLISHING_RIGHTS: rights.publishingShares,
     PUBLISHING_SHARES: rights.publishingShares,
     SAMPLES_DEFINITION: rights.samplesDefinition ?? null,
-    ROYALTY_AMOUNT: rights.royaltyAmount ?? null,
   };
 
   const template = BODIES[kind];
