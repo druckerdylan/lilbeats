@@ -18,6 +18,14 @@ import { join, basename, extname } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
 const DRY = process.argv.includes("--dry-run");
+/*
+  Supabase caps a single file at 50 MB on the free plan; these stems archives
+  are 105-243 MB, so they cannot be uploaded there at all. Skipping them
+  publishes the catalogue with the MP3 and Premium tiers only — Unlimited and
+  Exclusive both promise trackouts, so neither is offered for a beat whose
+  stems are absent, which is the same rule the admin uploader applies.
+*/
+const SKIP_STEMS = process.argv.includes("--skip-stems");
 const STAGING = join(process.cwd(), ".beats-staging");
 const MANIFEST = join(STAGING, "beats-manifest.json");
 
@@ -54,7 +62,7 @@ for (const b of manifest) {
     if (!b[f]) errors.push(`${b.folder}: missing ${f}`);
     else if (!existsSync(b[f])) errors.push(`${b.folder}: ${f} not found at ${b[f]}`);
   }
-  if (b.stems && !existsSync(b.stems)) errors.push(`${b.folder}: stems not found at ${b.stems}`);
+  if (!SKIP_STEMS && b.stems && !existsSync(b.stems)) errors.push(`${b.folder}: stems not found at ${b.stems}`);
 }
 
 if (errors.length) {
@@ -65,18 +73,19 @@ if (errors.length) {
 
 const totalBytes = manifest.reduce(
   (sum, b) =>
-    sum + [b.artwork, b.previewAudio, b.fullMp3, b.wav, b.stems]
+    sum + [b.artwork, b.previewAudio, b.fullMp3, b.wav, SKIP_STEMS ? null : b.stems]
       .filter(Boolean)
       .reduce((s, f) => s + statSync(f).size, 0),
   0
 );
 console.log(
-  `${manifest.length} beat(s) validated · ${(totalBytes / 1e9).toFixed(2)} GB to upload\n`
+  `${manifest.length} beat(s) validated · ${(totalBytes / 1e9).toFixed(2)} GB to upload` +
+    (SKIP_STEMS ? "  (stems skipped — MP3 and Premium tiers only)" : "") + "\n"
 );
 
 if (DRY) {
   for (const b of manifest) {
-    const tiers = b.stems ? "mp3, wav, unlimited, exclusive" : "mp3, wav";
+    const tiers = b.stems && !SKIP_STEMS ? "mp3, wav, unlimited, exclusive" : "mp3, wav";
     console.log(`  ${String(b.bpm).padStart(3)}bpm ${(b.key + " " + b.keyMode).padEnd(9)} ${b.genre.padEnd(14)} ${b.title}`);
     console.log(`        tiers: ${tiers}`);
   }
@@ -138,7 +147,7 @@ for (const [i, beat] of manifest.entries()) {
     process.stdout.write(" wav…");
     const wavPath = await uploadOnce(BUCKETS.files, beat.wav, `${stem}.wav`);
     let stemsPath = null;
-    if (beat.stems) {
+    if (beat.stems && !SKIP_STEMS) {
       process.stdout.write(" stems…");
       stemsPath = await uploadOnce(BUCKETS.files, beat.stems, `${stem}-stems.zip`);
     }
