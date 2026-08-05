@@ -10,7 +10,8 @@
     "check-setup": "node --experimental-websocket --env-file=.env.local scripts/check-setup.mjs",
     "import-beats": "node --experimental-websocket --env-file=.env.local scripts/import-beats.mjs",
     "prepare-beats": "node scripts/prepare-beats.mjs",
-    "configure": "node scripts/configure.mjs"
+    "configure": "node scripts/configure.mjs",
+    "backfill-stems": "node --experimental-websocket --env-file=.env.local scripts/backfill-stems.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
