@@ -4,6 +4,7 @@ import { BeatStoreClient } from "@/components/beats/beat-store-client";
 import { Kicker } from "@/components/shared/section-heading";
 import { Reveal, SplitWords } from "@/components/shared/reveal";
 import { GlitchText } from "@/components/visuals/glitch-text";
+import { CatalogSpectrum } from "@/components/visuals/catalog-spectrum";
 
 export const revalidate = 60;
 
@@ -23,8 +24,13 @@ export default async function BeatsPage() {
     : null;
 
   return (
-    <div className="bg-ink">
-      <header className="relative isolate overflow-hidden">
+    <div className="relative">
+      <CatalogSpectrum />
+
+      {/* `isolate` on the header would trap it in its own stacking context and
+          hide the fixed backdrop behind it, so the layers are ordered here
+          instead: backdrop at z-0, everything readable above it. */}
+      <header className="relative z-10 overflow-hidden">
         {/* Key light pooling behind the title card. */}
         <div
           aria-hidden
@@ -96,7 +102,9 @@ export default async function BeatsPage() {
         <div className="hairline" aria-hidden />
       </header>
 
-      <BeatStoreClient beats={beats} />
+      <div className="relative z-10">
+        <BeatStoreClient beats={beats} />
+      </div>
     </div>
   );
 }
