@@ -69,7 +69,7 @@ export function connectAnalyser(): SpectrumTap | null {
     analyser.fftSize = FFT_SIZE;
     // Without smoothing the bars strobe on every frame and read as noise
     // rather than as music.
-    analyser.smoothingTimeConstant = 0.78;
+    analyser.smoothingTimeConstant = 0.7;
 
     source.connect(analyser);
     // The leg that keeps the beat audible. Do not remove.

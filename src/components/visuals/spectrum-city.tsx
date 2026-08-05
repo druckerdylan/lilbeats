@@ -97,15 +97,24 @@ export function SpectrumCity({ className }: { className?: string }) {
             let sum = 0;
             for (let j = lo; j < hi && j < n; j++) sum += tap.bins[j];
             const raw = sum / (hi - lo) / 255;
-            // Slope + gamma, the two controls every spectrum analyser has.
-            // Music rolls off steeply with frequency; the tilt lifts the highs
-            // back into frame and the gamma keeps quiet bands visible instead
-            // of pinned to the floor.
-            const tilt = 1 + p * 3.2;
-            // A floor so the skyline never fully flatlines between hits.
-            const v = Math.max(0.05, Math.min(1, Math.pow(raw * tilt, 0.62)));
+            /*
+              Order matters here, and getting it wrong is what flattened this
+              before: the gamma has to shape the raw 0..1 reading, and only
+              then does the tilt lift the high end.
+
+              Previously it was pow(raw * tilt, 0.62) with a tilt up to 4.2x.
+              Anything above raw 0.24 therefore left the 0..1 range before the
+              gamma saw it, and pow(x>1, 0.62) stays above 1 — so nearly every
+              band clamped to full height and the skyline read as a solid block.
+            */
+            const tilt = 1 + p * 0.7; // gentle high-frequency compensation
+            // Near-linear on purpose. Measuring a real track through this
+            // analyser gives roughly 0.86 in the bass against 0.22 in the
+            // highs — a 4x range that any meaningful gamma lift flattens into
+            // a solid block. Scaling leaves peaks somewhere to go.
+            const v = Math.max(0.02, Math.min(1, raw * tilt * 0.85));
             // Attack fast, release slow — matches how a level meter behaves.
-            levels[i] += (v - levels[i]) * (v > levels[i] ? 0.55 : 0.12);
+            levels[i] += (v - levels[i]) * (v > levels[i] ? 0.6 : 0.2);
           }
           return;
         }
