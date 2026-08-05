@@ -28,6 +28,11 @@ const BUCKET = "beat-previews";
 
 /** 0 or unset = whole track. */
 const SECONDS = Number(process.env.PREVIEW_SECONDS ?? 0);
+/**
+ * `mp3` (default) encodes 320kbps from the WAV. `wav` streams the lossless
+ * master untouched — see the size warning where it is used.
+ */
+const FORMAT = (process.env.PREVIEW_FORMAT ?? "mp3").toLowerCase();
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -71,12 +76,24 @@ for (const [i, beat] of manifest.entries()) {
 
   try {
     if (!existsSync(local)) {
-      // 192k keeps the stream light without audibly degrading a preview.
-      const args = ["-y", "-loglevel", "error", "-i", beat.fullMp3];
+      /*
+        Encoded from the WAV, not the MP3. Going via the MP3 meant a lossy
+        source re-encoded to a lower lossy bitrate — two generations of loss,
+        which is audibly worse than the master and was the cause of previews
+        sounding more compressed than the same track elsewhere.
+
+        320kbps from a 1411kbps source is one generation, and matches the
+        bitrate of the distributed MP3.
+      */
+      const args = ["-y", "-loglevel", "error", "-i", beat.wav];
       if (SECONDS > 0) {
         args.push("-t", String(SECONDS), "-af", `afade=t=out:st=${Math.max(0, SECONDS - 4)}:d=4`);
       }
-      args.push("-codec:a", "libmp3lame", "-b:a", "192k", local);
+      if (FORMAT === "wav") {
+        args.push("-c:a", "copy", local);
+      } else {
+        args.push("-codec:a", "libmp3lame", "-b:a", "320k", local);
+      }
       execFileSync("ffmpeg", args);
     }
 
