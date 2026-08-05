@@ -136,7 +136,15 @@ function filesIn(dir) {
   return found;
 }
 
-/** Some stems archives encode the key, e.g. `villainz-152-bpm-e-min_stems.zip`. */
+/**
+ * Some stems archives encode the key, e.g. `villainz-152-bpm-e-min_stems.zip`.
+ *
+ * Treated as a WEAK hint only. Cross-checking all 25 against the published
+ * BeatStars pages found 4 filenames disagreeing with the track's own listing
+ * (bali reads f-min where the page says F#m; run reads e-min where the page
+ * says Dm), so `fetch-keys.mjs` overwrites this from the live listing — that
+ * is what buyers actually see.
+ */
 function keyFromFilename(path) {
   if (!path) return null;
   const m = basename(path).toLowerCase().match(/-([a-g])(#|b)?-?(min|maj)/);
