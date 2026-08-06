@@ -5,12 +5,7 @@ import { Kicker } from "@/components/shared/section-heading";
 import { Reveal, SplitWords } from "@/components/shared/reveal";
 import { GlitchText } from "@/components/visuals/glitch-text";
 import { HudFrame } from "@/components/visuals/hud-frame";
-import {
-  InstagramIcon,
-  YoutubeIcon,
-  TiktokIcon,
-  BeatstarsIcon,
-} from "@/components/shared/social-icons";
+import { YoutubeIcon, BeatstarsIcon } from "@/components/shared/social-icons";
 import { BRAND, SOCIAL_LINKS } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -20,9 +15,7 @@ export const metadata: Metadata = {
 };
 
 const SOCIAL_ROWS = [
-  { label: "Instagram", href: SOCIAL_LINKS.instagram, Icon: InstagramIcon },
   { label: "YouTube", href: SOCIAL_LINKS.youtube, Icon: YoutubeIcon },
-  { label: "TikTok", href: SOCIAL_LINKS.tiktok, Icon: TiktokIcon },
   { label: "BeatStars", href: SOCIAL_LINKS.beatstars, Icon: BeatstarsIcon },
 ];
 

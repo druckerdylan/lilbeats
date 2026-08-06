@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Play } from "lucide-react";
-import { InstagramIcon, YoutubeIcon } from "@/components/shared/social-icons";
+import { YoutubeIcon, BeatstarsIcon } from "@/components/shared/social-icons";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { GlitchText } from "@/components/visuals/glitch-text";
 import { SOCIAL_LINKS } from "@/lib/constants";
@@ -50,13 +50,13 @@ export function SocialSection() {
             you can actually click. */}
         <div className="flex shrink-0 gap-3">
           <a
-            href={SOCIAL_LINKS.instagram}
+            href={SOCIAL_LINKS.beatstars}
             target="_blank"
             rel="noreferrer"
             className={CHIP}
           >
-            <InstagramIcon aria-hidden className="size-4" />
-            <GlitchText text="Instagram" className="u-meta" />
+            <BeatstarsIcon aria-hidden className="size-4" />
+            <GlitchText text="BeatStars" className="u-meta" />
           </a>
           <a
             href={SOCIAL_LINKS.youtube}
@@ -80,7 +80,7 @@ export function SocialSection() {
         {GALLERY.map((shot, index) => (
           <RevealItem key={shot.src} variant="rise" className={shot.cell}>
             <a
-              href={SOCIAL_LINKS.instagram}
+              href={SOCIAL_LINKS.beatstars}
               target="_blank"
               rel="noreferrer"
               // `edge-hot` already owns the transition shorthand (border,

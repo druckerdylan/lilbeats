@@ -43,7 +43,21 @@ export interface TierRights {
    */
   termClause: string | null;
 
-  // ── Not yet specified ──────────────────────────────────────────────────
+  /*
+    Derived, not published. The BeatStars storefront lists only the headline
+    caps — copies, audio streams, video count, radio stations — and the values
+    below appear nowhere public, only inside the producer's own licence
+    settings. They are read from the stated terms rather than invented:
+
+    · Video streams are uncapped because the published terms limit the *number*
+      of music videos (one) and say nothing about how often one may be played.
+    · Free downloads follow the distribution grant, which the contract already
+      expresses as a single "downloads/physical music products" allowance.
+    · The samples clause is drafted to assert nothing about sample content —
+      which nobody but the producer can know — and instead places clearance
+      with the Licensee, matching the "as is" warranty the contract already
+      carries. THIS ONE IS ORIGINAL DRAFTING AND WANTS A LAWYER'S EYE.
+  */
   /** {MONETIZED_VIDEO_STREAMS_ALLOWED} */
   monetizedVideoStreams: string | null;
   /** {NON_MONETIZED_VIDEO_STREAMS_ALLOWED} */
@@ -87,10 +101,11 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     publishingShares: PUBLISHING_50_50,
     termClause:
       "The Term of this Agreement shall be ten (10) years and this license shall expire on the ten (10) year anniversary of the Effective Date.",
-    monetizedVideoStreams: null,
-    nonMonetizedVideoStreams: null,
-    freeDownloads: null,
-    samplesDefinition: null,
+    monetizedVideoStreams: "unlimited",
+    nonMonetizedVideoStreams: "unlimited",
+    freeDownloads: "unlimited",
+    samplesDefinition:
+      "Producer makes no representation or warranty as to whether the Beat incorporates any third-party samples. Licensee is responsible for obtaining and paying for any clearance, licence or consent required in connection with Licensee's use of the New Song beyond the rights expressly granted in this Agreement.",
   },
   wav: {
     distributeCopies: "500,000",
@@ -102,10 +117,11 @@ export const TIER_RIGHTS: Record<LicenseId, TierRights> = {
     publishingShares: PUBLISHING_50_50,
     termClause:
       "The Term of this Agreement shall be ten (10) years and this license shall expire on the ten (10) year anniversary of the Effective Date.",
-    monetizedVideoStreams: null,
-    nonMonetizedVideoStreams: null,
-    freeDownloads: null,
-    samplesDefinition: null,
+    monetizedVideoStreams: "unlimited",
+    nonMonetizedVideoStreams: "unlimited",
+    freeDownloads: "unlimited",
+    samplesDefinition:
+      "Producer makes no representation or warranty as to whether the Beat incorporates any third-party samples. Licensee is responsible for obtaining and paying for any clearance, licence or consent required in connection with Licensee's use of the New Song beyond the rights expressly granted in this Agreement.",
   },
   unlimited: {
     distributeCopies: "unlimited",

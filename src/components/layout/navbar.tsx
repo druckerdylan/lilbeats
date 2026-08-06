@@ -22,7 +22,6 @@ import { cn } from "@/lib/utils";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const DRAWER_SOCIALS = [
-  { label: "Instagram", href: SOCIAL_LINKS.instagram },
   { label: "YouTube", href: SOCIAL_LINKS.youtube },
   { label: "BeatStars", href: SOCIAL_LINKS.beatstars },
 ];

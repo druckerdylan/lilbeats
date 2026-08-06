@@ -10,13 +10,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check-setup": "node --experimental-websocket --env-file=.env.local scripts/check-setup.mjs",
-    "import-beats": "node --experimental-websocket --env-file=.env.local scripts/import-beats.mjs",
+    "check-setup": "node --env-file=.env.local scripts/check-setup.mjs",
+    "import-beats": "node --env-file=.env.local scripts/import-beats.mjs",
     "prepare-beats": "node scripts/prepare-beats.mjs",
     "configure": "node scripts/configure.mjs",
-    "backfill-stems": "node --experimental-websocket --env-file=.env.local scripts/backfill-stems.mjs",
-    "refresh-previews": "node --experimental-websocket --env-file=.env.local scripts/refresh-previews.mjs",
-    "check-stripe": "node --experimental-websocket --env-file=.env.local scripts/check-stripe.mjs"
+    "backfill-stems": "node --env-file=.env.local scripts/backfill-stems.mjs",
+    "refresh-previews": "node --env-file=.env.local scripts/refresh-previews.mjs",
+    "check-stripe": "node --env-file=.env.local scripts/check-stripe.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

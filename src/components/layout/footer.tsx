@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { InstagramIcon, YoutubeIcon, SoundcloudIcon } from "@/components/shared/social-icons";
+import { YoutubeIcon, BeatstarsIcon } from "@/components/shared/social-icons";
 import { Logo } from "@/components/layout/logo";
 import { NewsletterForm } from "@/components/marketing/newsletter-form";
 import { Reveal } from "@/components/shared/reveal";
@@ -7,9 +7,8 @@ import { BRAND, FOOTER_LINKS, SITE_NAME, SOCIAL_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const SOCIALS = [
-  { label: "Instagram", href: SOCIAL_LINKS.instagram, Icon: InstagramIcon },
   { label: "YouTube", href: SOCIAL_LINKS.youtube, Icon: YoutubeIcon },
-  { label: "SoundCloud", href: SOCIAL_LINKS.soundcloud, Icon: SoundcloudIcon },
+  { label: "BeatStars", href: SOCIAL_LINKS.beatstars, Icon: BeatstarsIcon },
 ];
 
 /*

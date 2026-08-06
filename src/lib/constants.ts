@@ -10,14 +10,15 @@ export const BRAND = {
   responseTime: "Within 24–48 hours",
 };
 
+/*
+  Only accounts confirmed to be the producer's. The generated site shipped with
+  instagram/tiktok/soundcloud/spotify/appleMusic pointing at `/lilbeats`
+  handles that belong to other people — live, clickable, and sending visitors
+  to strangers. Removed rather than guessed; add them back as they are known.
+*/
 export const SOCIAL_LINKS = {
-  instagram: "https://instagram.com/lilbeats",
   youtube: "https://youtube.com/@lilbeats-h1x",
-  tiktok: "https://tiktok.com/@lilbeats",
-  soundcloud: "https://soundcloud.com/lilbeats",
-  beatstars: "https://beatstars.com/lilbeats",
-  spotify: "https://open.spotify.com/artist/lilbeats",
-  appleMusic: "https://music.apple.com/artist/lilbeats",
+  beatstars: "https://www.beatstars.com/lilbeatsofficial",
 };
 
 export const NAV_LINKS = [
