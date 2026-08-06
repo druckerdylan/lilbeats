@@ -15,7 +15,8 @@
     "prepare-beats": "node scripts/prepare-beats.mjs",
     "configure": "node scripts/configure.mjs",
     "backfill-stems": "node --experimental-websocket --env-file=.env.local scripts/backfill-stems.mjs",
-    "refresh-previews": "node --experimental-websocket --env-file=.env.local scripts/refresh-previews.mjs"
+    "refresh-previews": "node --experimental-websocket --env-file=.env.local scripts/refresh-previews.mjs",
+    "check-stripe": "node --experimental-websocket --env-file=.env.local scripts/check-stripe.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

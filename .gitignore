@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Local beat staging (large audio, not for the repo)
 /.beats-staging
+
+# Local Stripe CLI binary (35MB, not source)
+/bin/stripe

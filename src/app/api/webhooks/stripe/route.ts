@@ -63,6 +63,24 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true });
 }
 
+/**
+ * Flattens Stripe's structured billing address into the single line the
+ * licence agreements need — each one names the Licensee's address in its
+ * opening sentence ("residing at ...").
+ */
+function formatAddress(address: Stripe.Address | null | undefined): string | null {
+  if (!address) return null;
+  const parts = [
+    address.line1,
+    address.line2,
+    address.city,
+    address.state,
+    address.postal_code,
+    address.country,
+  ].filter((p): p is string => Boolean(p && p.trim()));
+  return parts.length ? parts.join(", ") : null;
+}
+
 async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
   const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
     expand: ["data.price.product"],
@@ -100,6 +118,9 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
           stripe_session_id: session.id,
           customer_email: customerEmail,
           customer_name: session.customer_details?.name ?? null,
+          // Collected at checkout because the agreements name it and there is
+          // no later opportunity to ask. Without it a contract cannot render.
+          customer_address: formatAddress(session.customer_details?.address),
           amount_total: amountTotal,
           currency: session.currency ?? "usd",
           status: "paid",

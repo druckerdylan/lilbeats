@@ -58,7 +58,10 @@ export async function POST(req: NextRequest) {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      payment_method_types: ["card", "paypal"],
+      // Omitted deliberately: Stripe then offers whatever payment methods are
+      // enabled on the account. Hardcoding ["card", "paypal"] throws until
+      // PayPal is separately activated, and pinning the list means new methods
+      // need a code change to enable.
       line_items: lineItems,
       success_url: `${SITE_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/checkout`,
