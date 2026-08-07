@@ -155,6 +155,65 @@ export function contactAdminEmail(payload: {
   };
 }
 
+/**
+ * The Artist Starter Pack delivery email — the only thing /free promises.
+ *
+ * `beats` may legitimately arrive empty: `getStarterPackBeats` fails closed
+ * rather than throwing, because someone who has just handed over their email
+ * address must still receive a reply. In that case the email says so plainly
+ * and asks them to reply, instead of shipping an empty list.
+ */
+export function starterPackEmail(params: {
+  beats: Array<{ title: string; url: string }>;
+}): { subject: string; html: string } {
+  const rows = params.beats
+    .map(
+      (beat, i) => `
+      <tr>
+        <td style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">
+          <span style="color:#4a4a52;font-size:13px;padding-right:10px;">${String(i + 1).padStart(2, "0")}</span>
+          <span style="font-weight:600;">${beat.title}</span>
+        </td>
+        <td align="right" valign="middle" style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">
+          <a href="${beat.url}" style="color:#ff2d47;text-decoration:none;font-weight:600;font-size:13px;">Download MP3</a>
+        </td>
+      </tr>`
+    )
+    .join("");
+
+  const list = params.beats.length
+    ? `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
+      ${rows}
+    </table>
+    <p style="margin:20px 0 0;color:#98979c;font-size:13px;">Right-click &rarr; Save As if a link opens in your browser instead of downloading.</p>
+  `
+    : `
+    <p style="margin:0 0 16px;">We hit a snag pulling your download links together — nothing you did. Reply to this email and we'll send the five tracks straight over.</p>
+  `;
+
+  const body = `
+    <p style="margin:0 0 16px;">Here's your Artist Starter Pack.</p>
+    <p style="margin:0 0 24px;">${params.beats.length ? "Five beats, full-length 320kbps MP3s. Load them in, write to them, see what sticks." : "Five beats, full-length 320kbps MP3s."}</p>
+    ${list}
+    <!--
+      Deliberately says "demo MP3s", not "tagged demo MP3s": these files come
+      from the public previews bucket, and scripts/refresh-previews.mjs states
+      in its own header that these masters do not carry a producer tag. Add
+      "tagged" back here the moment the previews genuinely do.
+    -->
+    <p style="margin:28px 0 0;color:#98979c;font-size:13px;">These are free demo MP3s for trying ideas out — releasing, distributing, or monetising a track built on one needs a paid licence, which you can read in full at <a href="${SITE_URL}/licensing" style="color:#98979c;">${SITE_URL}/licensing</a>.</p>
+    <div style="margin:24px 0 0;">
+      <a href="${SITE_URL}/beats" style="display:inline-block;background:#b3122b;color:#f3efe7;padding:12px 22px;border-radius:4px;text-decoration:none;font-weight:600;">Browse the full catalog</a>
+    </div>
+  `;
+
+  return {
+    subject: `Your Artist Starter Pack from ${SITE_NAME}`,
+    html: shell("Five free beats — download links inside.", body),
+  };
+}
+
 export function newsletterWelcomeEmail(): { subject: string; html: string } {
   const body = `
     <p style="margin:0 0 16px;">You're on the list.</p>

@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Licensing",
   description: "Beat licensing terms for MP3, WAV, and Stems tiers at Lil Beats.",
+  alternates: { canonical: "/licensing" },
 };
 
 const LAST_UPDATED = "July 2026";

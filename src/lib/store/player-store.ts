@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { track as trackEvent } from "@/lib/analytics";
 
 /**
  * What the persistent transport bar needs to render the current track.
@@ -13,6 +14,13 @@ export interface NowPlayingTrack {
   subtitle?: string;
   artworkUrl?: string;
   href?: string;
+  /**
+   * Catalogue slug. Its presence is what marks this as a real beat rather
+   * than a comparison clip, so it doubles as the gate on the `preview_play`
+   * event — the mixing before/after channels and the portfolio players pass
+   * no track at all and are correctly never counted as beat previews.
+   */
+  slug?: string;
 }
 
 interface PlayerState {
@@ -90,6 +98,17 @@ export const useAudioPlayerStore = create<PlayerState>((set, get) => ({
       }
       return;
     }
+
+    /*
+      `preview_play` fires here and only here — on the branch that loads a
+      *new* source. Every play button on the site funnels through `toggle`,
+      so one call covers the catalogue grid, the beat page, and the docked
+      transport without any of them having to remember to instrument
+      themselves. Resuming after a pause deliberately does not re-fire: the
+      question the metric answers is "how many previews got started", and a
+      pause/resume is one preview, not two.
+    */
+    if (track?.slug) trackEvent("preview_play", { beat: track.slug });
 
     el.src = src;
     el.currentTime = 0;

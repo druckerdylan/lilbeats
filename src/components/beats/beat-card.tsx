@@ -129,6 +129,7 @@ export function BeatCard({
                 subtitle: `${beat.genre} · ${beat.bpm} BPM`,
                 artworkUrl: beat.artworkUrl,
                 href: `/beats/${beat.slug}`,
+                slug: beat.slug,
               })
             }
             aria-label={isActive && isPlaying ? `Pause ${beat.title}` : `Play ${beat.title} preview`}

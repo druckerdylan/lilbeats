@@ -8,6 +8,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { UploadCloud } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -174,6 +175,18 @@ export function MixingRequestForm() {
       const res = await fetch("/api/mixing-request", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Submission failed.");
+
+      /*
+        Only after the route has accepted and stored it — a request that
+        400s on a validation error is not a lead. The two props are the
+        shape of the job, not the person asking: this form also collects a
+        name, email, phone, and song title, and none of those go anywhere
+        near analytics.
+      */
+      track("mixing_request", {
+        service: values.serviceRequested,
+        songs: values.numberOfSongs,
+      });
 
       router.push("/mixing-mastering/request/confirmation");
     } catch (error) {

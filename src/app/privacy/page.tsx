@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: `How ${SITE_NAME} collects, uses, and protects your information.`,
+  alternates: { canonical: "/privacy" },
 };
 
 const LAST_UPDATED = "July 2026";
@@ -27,15 +28,39 @@ const CLAUSES: LegalClause[] = [
   {
     id: "information-we-collect",
     title: "Information We Collect",
+    /*
+      This clause used to claim "standard web analytics" while the site ran
+      none at all. It now runs Vercel Web Analytics, so the paragraph
+      describes what that specific product actually does — see
+      vercel.com/docs/analytics/privacy-policy. If the analytics provider
+      ever changes, this text and the third-party list below change with it.
+    */
     body: (
-      <p>
-        When you browse {SITE_NAME}, we collect basic usage data through
-        standard web analytics. When you purchase a beat license, submit
-        a mixing &amp; mastering request, subscribe to our email list, or
-        contact us, we collect the information you provide directly —
-        typically your name, email address, phone number, and any
-        project files or links you choose to share.
-      </p>
+      <>
+        <p>
+          When you browse {SITE_NAME}, we collect aggregate usage data through
+          Vercel Web Analytics: which pages were viewed, the referring site,
+          approximate location (country, region, city), and device, browser,
+          and operating system type. We also record a small number of
+          anonymous events — a beat preview being played, a license being
+          added to the cart, a form being submitted successfully — so we know
+          which parts of the site are useful. These events never include your
+          email address or any other detail that identifies you.
+        </p>
+        <p>
+          This analytics data is not tied to a name, an account, or a stored
+          IP address, and it cannot be used to follow you onto other websites.
+          Visitors are counted using a temporary hash derived from the
+          request, which is discarded after 24 hours.
+        </p>
+        <p>
+          When you purchase a beat license, submit a mixing &amp; mastering
+          request, subscribe to our email list, or contact us, we collect the
+          information you provide directly — typically your name, email
+          address, phone number, and any project files or links you choose to
+          share.
+        </p>
+      </>
     ),
   },
   {
@@ -72,7 +97,8 @@ const CLAUSES: LegalClause[] = [
         {SITE_NAME} uses your browser&rsquo;s local storage to remember
         items in your cart and your favorited beats between visits. This
         data stays on your device and is not sold or shared with third
-        parties.
+        parties. Our analytics sets no cookies of its own and does not use
+        third-party cookies, so there is no tracking cookie to opt out of.
       </p>
     ),
   },
@@ -83,7 +109,8 @@ const CLAUSES: LegalClause[] = [
       <p>
         We rely on trusted third-party providers to operate the site,
         including Stripe (payments), Supabase (database and file
-        storage), and Resend (transactional email). Each provider
+        storage), Resend (transactional email), and Vercel (hosting and
+        the aggregate analytics described above). Each provider
         processes your data only as needed to perform their respective
         service.
       </p>
