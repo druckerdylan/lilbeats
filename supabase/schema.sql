@@ -91,7 +91,16 @@ create table if not exists public.order_items (
   beat_title text not null,
   license_id text not null check (license_id in ('mp3', 'wav', 'unlimited', 'exclusive')),
   license_name text not null,
-  price numeric(10, 2) not null
+  price numeric(10, 2) not null,
+  -- Stripe delivers webhooks at-least-once and retries can overlap. The
+  -- handler de-duplicates by reading existing items first, but a
+  -- read-then-write cannot survive two deliveries that both read before
+  -- either writes — which is how one $35 order came to hold two $35 line
+  -- items. This constraint is the part that actually holds: the losing
+  -- delivery fails, Stripe retries, and the retry correctly sees the item
+  -- already recorded. Nobody can own the same licence for the same beat
+  -- twice on one order.
+  constraint order_items_unique_line unique (order_id, beat_id, license_id)
 );
 
 create index if not exists order_items_order_id_idx on public.order_items (order_id);

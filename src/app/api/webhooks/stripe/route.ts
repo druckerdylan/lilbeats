@@ -183,6 +183,14 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
       // Previously this logged and continued, then still sent a "your files
       // are ready" receipt — the customer paid, got an email, and had nothing
       // to download. Abort so Stripe retries and no receipt goes out.
+      //
+      // One expected cause of failure here is the unique constraint
+      // `order_items_unique_line` (see supabase/schema.sql): a concurrent
+      // delivery of the same event won the race and recorded this line
+      // first. Throwing is still the correct response — Stripe retries, the
+      // retry finds the item in `alreadyRecorded` above, and returns early
+      // without minting a second download token. The read-then-write dedup
+      // is the fast path; the constraint is what makes it sound.
       if (itemError || !orderItem) {
         throw new Error(
           `Could not record "${item.beatTitle}" (${item.licenseId}): ${itemError?.message}`
