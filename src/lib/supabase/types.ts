@@ -16,6 +16,9 @@ export interface Database {
           full_mp3_path: string;
           wav_path: string;
           stems_path: string | null;
+          /* Pre-built delivery archives — see supabase/schema.sql. */
+          premium_bundle_path: string | null;
+          complete_bundle_path: string | null;
           bpm: number;
           key: string;
           key_mode: string;

@@ -1,4 +1,4 @@
-import { Beat, FaqItem, PortfolioItem, Review, Testimonial } from "@/lib/types";
+import { Beat, FaqItem, Review, Testimonial } from "@/lib/types";
 import { unsplash } from "@/lib/unsplash";
 
 export const BEATS: Beat[] = [
@@ -281,8 +281,6 @@ export const BEATS: Beat[] = [
 export const REVIEWS: Review[] = [];
 
 export const TESTIMONIALS: Testimonial[] = [];
-
-export const PORTFOLIO_ITEMS: PortfolioItem[] = [];
 
 export const MIXING_FAQS: FaqItem[] = [
   {

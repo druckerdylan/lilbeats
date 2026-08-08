@@ -1,5 +1,6 @@
 import { BRAND, SITE_NAME, SITE_URL } from "@/lib/constants";
 import { formatPrice } from "@/lib/format";
+import { getLicenseTier } from "@/lib/licensing";
 import { OrderItemRecord, MixingRequestPayload } from "@/lib/types";
 
 function shell(preheader: string, bodyHtml: string): string {
@@ -48,11 +49,20 @@ export function orderReceiptEmail(params: {
   */
   const rows = params.items
     .map(
-      (item) => `
+      (item) => {
+        /*
+          Naming the contents matters: tiers above MP3 deliver a ZIP, and a
+          buyer who expected a loose file needs to know the WAV and stems are
+          inside it rather than missing.
+        */
+        const contents = getLicenseTier(item.licenseId)?.formatLabel;
+        return `
       <tr>
         <td style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">
           <div style="font-weight:600;">${item.beatTitle}</div>
-          <div style="color:#98979c;font-size:13px;padding-top:2px;">${item.licenseName}</div>
+          <div style="color:#98979c;font-size:13px;padding-top:2px;">${item.licenseName}${
+            contents ? ` &middot; ${contents}` : ""
+          }</div>
           <div style="padding-top:8px;font-size:13px;">
             ${item.downloadHref ? `<a href="${item.downloadHref}" style="color:#ff2d47;text-decoration:none;font-weight:600;">Download files</a>` : ""}
             ${item.downloadHref && item.contractHref ? `<span style="color:#4a4a52;padding:0 8px;">&middot;</span>` : ""}
@@ -60,7 +70,8 @@ export function orderReceiptEmail(params: {
           </div>
         </td>
         <td align="right" valign="top" style="padding:12px 0;border-bottom:1px solid rgba(243,239,231,0.08);">${formatPrice(item.price)}</td>
-      </tr>`
+      </tr>`;
+      }
     )
     .join("");
 

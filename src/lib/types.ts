@@ -91,20 +91,6 @@ export interface Testimonial {
   avatarUrl?: string;
 }
 
-export interface PortfolioItem {
-  id: string;
-  title: string;
-  artist: string;
-  role: string;
-  coverUrl: string;
-  description: string;
-  platform: "spotify" | "apple-music" | "youtube" | "soundcloud";
-  platformUrl: string;
-  previewAudioUrl: string;
-  embedUrl?: string;
-  year: number;
-}
-
 export interface CartLineItem {
   id: string;
   beatId: string;

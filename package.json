@@ -17,7 +17,8 @@
     "backfill-stems": "node --env-file=.env.local scripts/backfill-stems.mjs",
     "refresh-previews": "node --env-file=.env.local scripts/refresh-previews.mjs",
     "check-stripe": "node --env-file=.env.local scripts/check-stripe.mjs",
-    "backup-catalog": "node --env-file=.env.local scripts/backup-catalog.mjs"
+    "backup-catalog": "node --env-file=.env.local scripts/backup-catalog.mjs",
+    "build-bundles": "node --env-file=.env.local scripts/build-bundles.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

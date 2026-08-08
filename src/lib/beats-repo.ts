@@ -121,26 +121,36 @@ export interface BeatFileLocation {
 /**
  * The file a licence entitles the buyer to download.
  *
- * Tiers that include the trackout stems resolve to the stems ZIP; the rest
- * resolve to their highest-quality single file. The fallback chain matters:
- * without it a tier whose file was never uploaded would silently hand the
- * buyer a lower-tier file than they paid for, so it steps *down* only when
- * the entitled file genuinely doesn't exist.
+ * A download link resolves to exactly one object, but every tier above MP3
+ * promises several files — Premium is "MP3 + WAV", Unlimited and Exclusive
+ * are "MP3 + WAV + Stems". Those tiers therefore resolve to a pre-built
+ * bundle (see `scripts/build-bundles.mjs`) rather than to a single file.
  *
- * Note this delivers ONE file per licence. "MP3 + WAV + Stems" tiers
- * therefore hand over the stems ZIP alone — see `getBeatFileLocation`'s
- * callers if that needs to become a multi-file download.
+ * Before the bundles existed this returned the stems ZIP for Unlimited and
+ * Exclusive and the bare WAV for Premium — so buyers of all three tiers were
+ * handed strictly less than the store advertised.
+ *
+ * The fallback chain steps *down* only when the entitled file genuinely does
+ * not exist, so a beat that has not been bundled yet still delivers the best
+ * single file it has instead of failing. That is a stopgap, not the intent:
+ * `bundleReadiness()` reports which beats are still short.
  */
 function pathForLicense(
   licenseId: string,
-  files: { mp3: string | null; wav: string | null; stems: string | null }
+  files: {
+    mp3: string | null;
+    wav: string | null;
+    stems: string | null;
+    premiumBundle: string | null;
+    completeBundle: string | null;
+  }
 ): string | null {
   switch (licenseId) {
     case "exclusive":
     case "unlimited":
-      return files.stems ?? files.wav ?? files.mp3;
+      return files.completeBundle ?? files.stems ?? files.wav ?? files.mp3;
     case "wav":
-      return files.wav ?? files.mp3;
+      return files.premiumBundle ?? files.wav ?? files.mp3;
     default:
       return files.mp3;
   }
@@ -154,7 +164,7 @@ export async function getBeatFileLocation(
     const supabase = createAdminClient();
     const { data } = await supabase
       .from("beats")
-      .select("full_mp3_path, wav_path, stems_path")
+      .select("full_mp3_path, wav_path, stems_path, premium_bundle_path, complete_bundle_path")
       .eq("id", beatId)
       .maybeSingle();
     if (!data) return null;
@@ -163,6 +173,8 @@ export async function getBeatFileLocation(
       mp3: data.full_mp3_path,
       wav: data.wav_path,
       stems: data.stems_path,
+      premiumBundle: data.premium_bundle_path,
+      completeBundle: data.complete_bundle_path,
     });
     if (!path) return null;
 
@@ -176,6 +188,10 @@ export async function getBeatFileLocation(
     mp3: beat.fullMp3Url,
     wav: beat.wavUrl,
     stems: beat.stemsUrl,
+    // The local demo catalogue points every field at the same preview file;
+    // there is nothing to bundle, so these are always absent.
+    premiumBundle: null,
+    completeBundle: null,
   });
   if (!path) return null;
 

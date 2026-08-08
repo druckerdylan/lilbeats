@@ -10,7 +10,6 @@ const STATIC_ROUTES = [
   "/free",
   "/mixing-mastering",
   "/mixing-mastering/request",
-  "/portfolio",
   "/contact",
   "/privacy",
   "/terms",

@@ -48,7 +48,6 @@ export const SOCIAL_LINKS = {
 export const NAV_LINKS = [
   { label: "Beats", href: "/beats" },
   { label: "Mixing & Mastering", href: "/mixing-mastering" },
-  { label: "Portfolio", href: "/portfolio" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -56,7 +55,6 @@ export const FOOTER_LINKS = {
   explore: [
     { label: "Beats", href: "/beats" },
     { label: "Mixing & Mastering", href: "/mixing-mastering" },
-    { label: "Portfolio", href: "/portfolio" },
     { label: "Contact", href: "/contact" },
   ],
   legal: [

@@ -45,7 +45,6 @@ export function Testimonials() {
       <div className="relative mx-auto max-w-[1600px] px-5 sm:px-8 lg:px-14">
         <Reveal className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
           <SectionHeading
-            chapter="05"
             eyebrow="Testimonials"
             title={
               <>

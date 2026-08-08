@@ -25,6 +25,20 @@ create table if not exists public.beats (
   full_mp3_path text not null,
   wav_path text not null,
   stems_path text,
+  /*
+    Delivery bundles, built by `pnpm build-bundles`.
+
+    Every tier above MP3 advertises more than one file — Premium is "MP3 +
+    WAV", Unlimited and Exclusive are "MP3 + WAV + Stems" — but a download
+    link can only resolve to a single object. These are the pre-built archives
+    that make the delivery match the offer, rather than handing over one file
+    and calling it done.
+
+    Nullable: a beat without one falls back to the single best file it has, so
+    an un-bundled beat still delivers something rather than 404ing.
+  */
+  premium_bundle_path text,
+  complete_bundle_path text,
   bpm integer not null,
   key text not null,
   key_mode text not null,

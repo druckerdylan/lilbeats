@@ -32,7 +32,7 @@ export function EmailSignup() {
         <SectionHeading
           align="center"
           size="xl"
-          chapter="06"
+          chapter="04"
           eyebrow="Stay Updated"
           title={
             <>
