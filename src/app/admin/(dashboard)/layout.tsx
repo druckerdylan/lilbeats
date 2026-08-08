@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdminUser } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
 import { AdminNavList, AdminNavRail } from "@/components/admin/admin-nav";
 
@@ -9,10 +9,22 @@ export default async function AdminDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  /*
+    The allowlist, not just "a session exists".
+
+    Every page inside this group reads with the service-role client, which
+    bypasses RLS: /admin/orders renders customer names, emails and postal
+    addresses, /admin/mixing-requests renders names, emails and phone
+    numbers. Supabase ships with email sign-up enabled, and the anon key is
+    public by design — so gating on `getUser()` alone means anyone who can
+    register an account can read every customer record. `requireAdminUser`
+    is the check that was already written for the /api/admin routes; the
+    pages that actually render the data need it more than the APIs do.
+
+    It fails closed: unset ADMIN_EMAILS, unconfigured Supabase, or a signed-in
+    user outside the list all return null and land here.
+  */
+  const user = await requireAdminUser();
 
   if (!user) {
     redirect("/admin/login");

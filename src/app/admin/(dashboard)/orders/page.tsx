@@ -1,10 +1,21 @@
+import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/beats-repo";
+import { requireAdminUser } from "@/lib/admin-auth";
 import { formatPrice } from "@/lib/format";
 import { formatDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 
 export default async function AdminOrdersPage() {
+  /*
+    Re-checked here and not left to the group layout, for the reason
+    admin-auth.ts already gives about the API routes: a moved file or a
+    changed route group silently drops the gate above it. This page selects
+    `*` from orders — customer name, email and postal address — so it is
+    the wrong place to inherit an assumption.
+  */
+  if (!(await requireAdminUser())) notFound();
+
   const configured = isSupabaseConfigured();
   const orders = configured
     ? (

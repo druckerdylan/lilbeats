@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Kicker } from "@/components/shared/section-heading";
 import { Reveal, SplitWords } from "@/components/shared/reveal";
@@ -40,7 +39,18 @@ const DETAIL_ROWS: { label: string; value: React.ReactNode }[] = [
   { label: "Response", value: BRAND.responseTime },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ beat?: string; subject?: string }>;
+}) {
+  /*
+    Read on the server and handed down, so the form is real markup in the
+    prerendered HTML instead of a client island that only appears once
+    JavaScript runs. See the note on ContactForm.
+  */
+  const { beat, subject } = await searchParams;
+
   return (
     <div className="relative overflow-hidden">
       {/* Key light pooling behind the form column. */}
@@ -140,9 +150,7 @@ export default function ContactPage() {
                    already doing the instrumentation, and ticking the interior
                    rule too would be HUD on HUD. */}
                 <div className="hairline-dim mt-6 mb-8" aria-hidden />
-                <Suspense fallback={null}>
-                  <ContactForm />
-                </Suspense>
+                <ContactForm beat={beat ?? null} subject={subject ?? null} />
               </div>
             </HudFrame>
           </Reveal>

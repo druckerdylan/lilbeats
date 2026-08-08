@@ -1,9 +1,16 @@
+import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/beats-repo";
+import { requireAdminUser } from "@/lib/admin-auth";
 import { formatDate } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 
 export default async function AdminMixingRequestsPage() {
+  /* Selects `*` from mixing_requests — names, emails, phone numbers and the
+     paths of uploaded client files. Same reasoning as the orders page: the
+     gate is re-checked here rather than inherited. */
+  if (!(await requireAdminUser())) notFound();
+
   const configured = isSupabaseConfigured();
   const requests = configured
     ? (

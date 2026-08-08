@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -42,12 +41,25 @@ const FIELD =
   "input-cinema bg-charcoal/60! text-bone caret-ember-bright focus-visible:bg-charcoal/90! focus-visible:shadow-[inset_2px_0_0_0_var(--ember-bright)]";
 const LABEL = "u-meta text-smoke";
 
-export function ContactForm() {
-  const searchParams = useSearchParams();
+/*
+  `beat` and `subject` arrive as props from the server component rather than
+  being read here with `useSearchParams`. That hook opts the whole subtree
+  out of prerendering, and with the page's `<Suspense fallback={null}>` the
+  consequence was that the built HTML contained no form at all — the
+  "Send A Message" panel was an empty box until hydration, on the only
+  working inbound channel the site has.
+*/
+export function ContactForm({
+  beat = null,
+  subject = null,
+}: {
+  beat?: string | null;
+  subject?: string | null;
+}) {
   const [submitted, setSubmitted] = useState(false);
 
-  const exclusiveBeat = searchParams.get("beat");
-  const isExclusiveInquiry = searchParams.get("subject") === "exclusive-license";
+  const exclusiveBeat = beat;
+  const isExclusiveInquiry = subject === "exclusive-license";
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
