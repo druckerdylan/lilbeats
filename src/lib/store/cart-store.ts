@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { nanoid } from "nanoid";
 import { CartLineItem } from "@/lib/types";
+import { track } from "@/lib/analytics";
 
 interface CartState {
   items: CartLineItem[];
@@ -25,6 +26,19 @@ export const useCartStore = create<CartState>()(
           set({ isOpen: true });
           return;
         }
+        /*
+          Instrumented in the store rather than at the buttons: the catalogue
+          tile and the licence comparison table both add to cart, and putting
+          the event here means the two can never disagree about what counts.
+          Placed after the duplicate guard above, so re-adding a licence
+          already in the cart — which only re-opens the drawer — is not
+          counted as a second add.
+
+          Slug and licence tier only. `item` also carries the beat title and
+          artwork URL; neither is personal, but neither tells you anything a
+          slug doesn't, and a lean event is a readable one.
+        */
+        track("add_to_cart", { beat: item.beatSlug, license: item.licenseId });
         set((state) => ({
           items: [...state.items, { ...item, id: nanoid() }],
           isOpen: true,

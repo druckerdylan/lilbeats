@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description:
     "Get in touch with Lil Beats for licensing questions, custom production, or mixing & mastering inquiries.",
+  alternates: { canonical: "/contact" },
 };
 
 const SOCIAL_ROWS = [

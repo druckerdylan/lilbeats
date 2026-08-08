@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Beats",
   description:
     "Browse the full Lil Beats catalog — dark, cinematic instrumentals available for instant MP3, WAV, and stems licensing.",
+  // Overrides the root layout's canonical, which would otherwise point this
+  // page at the homepage. See the note in app/layout.tsx.
+  alternates: { canonical: "/beats" },
 };
 
 export default async function BeatsPage() {

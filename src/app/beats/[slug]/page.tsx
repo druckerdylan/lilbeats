@@ -44,6 +44,9 @@ export async function generateMetadata({
   return {
     title: beat.title,
     description: beat.description,
+    // Without this every beat page would inherit the root layout's `/`
+    // canonical and declare itself a duplicate of the homepage.
+    alternates: { canonical: `/beats/${beat.slug}` },
     openGraph: {
       title: beat.title,
       description: beat.description,
@@ -218,6 +221,7 @@ export default async function BeatPage({
                 subtitle: `${beat.genre} · ${beat.bpm} BPM`,
                 artworkUrl: beat.artworkUrl,
                 href: `/beats/${beat.slug}`,
+                slug: beat.slug,
               }}
             />
             <div className="mt-4 flex flex-wrap items-center gap-3">

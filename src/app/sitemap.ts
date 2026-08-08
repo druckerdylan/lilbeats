@@ -2,9 +2,12 @@ import type { MetadataRoute } from "next";
 import { getAllBeats } from "@/lib/beats-repo";
 import { SITE_URL } from "@/lib/constants";
 
+// `/thanks/free` is deliberately absent — it carries `robots: noindex` and
+// is only reachable after a form submission.
 const STATIC_ROUTES = [
   "",
   "/beats",
+  "/free",
   "/mixing-mastering",
   "/mixing-mastering/request",
   "/portfolio",

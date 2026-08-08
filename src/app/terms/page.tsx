@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: `The terms that govern your use of ${SITE_NAME} and its services.`,
+  alternates: { canonical: "/terms" },
 };
 
 const LAST_UPDATED = "July 2026";

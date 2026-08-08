@@ -24,6 +24,20 @@ function getResend(): Resend {
 const FROM_ADDRESS =
   process.env.RESEND_FROM_EMAIL ?? `${SITE_NAME} <orders@lilbeatsofficial.com>`;
 
+/**
+ * The bare address transactional email is sent from, pulled out of
+ * `RESEND_FROM_EMAIL`'s `Name <addr>` form (which is what Resend wants, but
+ * not what a reader can allowlist).
+ *
+ * Rendered on /thanks/free so someone waiting on the starter pack can add it
+ * to their contacts before the mail arrives. Derived from the same constant
+ * the send path uses, so the page can never quote an address the emails
+ * don't actually come from.
+ */
+export function senderAddress(): string {
+  return FROM_ADDRESS.match(/<([^>]+)>/)?.[1] ?? FROM_ADDRESS;
+}
+
 export async function sendEmail(params: {
   to: string | string[];
   subject: string;

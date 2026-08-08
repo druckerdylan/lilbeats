@@ -5,21 +5,25 @@ import { Button } from "@/components/ui/button";
 import { Kicker } from "@/components/shared/section-heading";
 import { Reveal, SplitWords } from "@/components/shared/reveal";
 import { BRAND } from "@/lib/constants";
+import { senderAddress } from "@/lib/resend";
+import { STARTER_PACK_SIZE } from "@/lib/starter-pack";
 
 export const metadata: Metadata = {
-  title: "Request Received",
+  title: "Check Your Inbox",
+  // A thank-you page is a dead end for a searcher — it has no offer on it,
+  // only a receipt for one. Keeping it out of the index also keeps it from
+  // outranking /free for the terms /free is actually written to win.
   robots: { index: false, follow: false },
-  // Inert alongside `noindex`, but it stops this page inheriting the parent
-  // segment's canonical and claiming to be /mixing-mastering.
-  alternates: { canonical: "/mixing-mastering/request/confirmation" },
 };
 
-const SLATE = [
-  { label: "Status", value: "Received" },
-  { label: "Response", value: BRAND.responseTime },
-];
+export default function FreeStarterPackThanksPage() {
+  const sender = senderAddress();
 
-export default function MixingRequestConfirmationPage() {
+  const SLATE: { label: string; value: string }[] = [
+    { label: "Status", value: "Sent" },
+    { label: "Contains", value: `${String(STARTER_PACK_SIZE).padStart(2, "0")} MP3s` },
+  ];
+
   return (
     <section className="relative overflow-hidden">
       <div
@@ -42,11 +46,11 @@ export default function MixingRequestConfirmationPage() {
         */}
         <h1 className="mt-8 font-display text-d0 uppercase text-bone">
           <span className="block">
-            <SplitWords text="Request" />
+            <SplitWords text="Check Your" />
           </span>
           <span className="block">
             <SplitWords
-              text="Received"
+              text="Inbox"
               delay={0.14}
               className="text-gradient-ember"
               wordClassName="text-gradient-ember"
@@ -56,17 +60,35 @@ export default function MixingRequestConfirmationPage() {
 
         <Reveal variant="rise" delay={0.3} className="mt-9 max-w-xl">
           <p className="text-base leading-relaxed text-smoke sm:text-lg">
-            Thanks for booking with Lil Beats. We&rsquo;ll review your project and follow up at
-            the email you provided within {BRAND.responseTime.toLowerCase()} to confirm scope
-            and scheduling.
+            Your Artist Starter Pack is on its way. If it isn&rsquo;t there in a couple of
+            minutes, check spam or the Promotions tab — free downloads land there more
+            often than they should.
           </p>
 
+          {/*
+            The allowlist address, set as a terminal readout rather than
+            buried in the paragraph above. It is the one piece of information
+            on this page someone might need to act on.
+          */}
+          <div className="mt-8 border border-bone/12 bg-pitch/60 p-5">
+            <p className="u-meta text-smoke">Sending From</p>
+            <p className="mt-3 font-mono text-sm break-all text-bone">{sender}</p>
+            <p className="mt-4 text-sm leading-relaxed text-smoke">
+              Add it to your contacts and the links will come straight through next time.
+            </p>
+          </div>
+
+          {/*
+            The one job this page has left. Someone who just asked for free
+            beats is as warm as they will ever be — the catalogue is the next
+            step, and it gets the solid button.
+          */}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Button variant="cinema" size="cinema" render={<Link href="/beats" />}>
-              Browse Beats
+              Browse The Catalog
             </Button>
-            <Button variant="cinemaGhost" size="cinema" render={<Link href="/" />}>
-              Back To Home
+            <Button variant="cinemaGhost" size="cinema" render={<Link href="/licensing" />}>
+              Licensing Terms
             </Button>
           </div>
         </Reveal>
@@ -76,11 +98,13 @@ export default function MixingRequestConfirmationPage() {
             {SLATE.map((item) => (
               <div key={item.label}>
                 <dt className="u-meta text-smoke">{item.label}</dt>
-                <dd className="mt-2.5 font-display text-d3 uppercase text-bone">{item.value}</dd>
+                <dd className="mt-2.5 font-display text-d3 uppercase text-bone">
+                  {item.value}
+                </dd>
               </div>
             ))}
             <div className="min-w-0">
-              <dt className="u-meta text-smoke">Questions</dt>
+              <dt className="u-meta text-smoke">Nothing Arrived?</dt>
               <dd className="mt-3.5">
                 <a
                   href={`mailto:${BRAND.email}`}

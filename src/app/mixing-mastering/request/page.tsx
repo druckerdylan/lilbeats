@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Book Mixing & Mastering",
   description:
     "Submit your project details to book mixing & mastering with Lil Beats — send stems, references, and deadlines in one form.",
+  alternates: { canonical: "/mixing-mastering/request" },
 };
 
 const FEATURED = SERVICE_TIERS.find((tier) => tier.highlighted) ?? SERVICE_TIERS[0];

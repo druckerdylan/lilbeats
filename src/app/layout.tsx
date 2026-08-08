@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { Navbar } from "@/components/layout/navbar";
@@ -27,6 +28,20 @@ const monoFont = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  /*
+    The same content answers on the apex, on www, and on the vercel.app
+    subdomain. Without a canonical that is three copies of every page as far
+    as a crawler is concerned, so this pins them all to `SITE_URL`, which
+    `metadataBase` resolves the relative path against.
+
+    INHERITED, and that is the catch: any page that does not set its own
+    `alternates` self-canonicalises to the homepage. Every indexable page
+    with a `metadata` export therefore carries its own path — except
+    /portfolio and /mixing-mastering, which are owned by another branch
+    right now and still need `alternates: { canonical: "/portfolio" }` and
+    `{ canonical: "/mixing-mastering" }` adding.
+  */
+  alternates: { canonical: "/" },
   title: {
     default: `${SITE_NAME} — Dark Production. Clean Mixes. Records That Hit.`,
     template: `%s — ${SITE_NAME}`,
@@ -105,6 +120,14 @@ export default function RootLayout({
           <Footer />
           <NowPlayingBar />
         </Providers>
+        {/*
+          Vercel Web Analytics. Injects nothing outside a Vercel deployment,
+          renders no DOM, and is cookieless — visitors are identified by a
+          hash of the incoming request that is discarded after 24 hours. It
+          is what makes the analytics paragraph in /privacy true; keep the
+          two in step if this ever changes.
+        */}
+        <Analytics />
       </body>
     </html>
   );

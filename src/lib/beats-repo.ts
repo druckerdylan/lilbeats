@@ -84,7 +84,28 @@ export async function getAllBeats(): Promise<Beat[]> {
       .select("*")
       .eq("published", true)
       .order("created_at", { ascending: false });
-    if (error || !data) return BEATS;
+
+    /*
+      Fails CLOSED, and the distinction matters.
+
+      Supabase not being configured at all (the branch below) means local
+      development, where the mock catalogue is the intended fixture.
+
+      Supabase being configured but erroring means production briefly lost
+      its database. Falling back to `BEATS` there would repopulate a live
+      storefront with invented beats — fabricated titles, fabricated play
+      counts, and artwork and audio URLs pointing at files that do not
+      exist — and quietly sell licences for them. An empty catalogue is a
+      visibly broken store; a fake one is a store that lies. Every caller
+      handles zero beats: /beats renders its empty state, the homepage's
+      featured grid renders none, `generateStaticParams` yields no paths
+      (`dynamicParams` is on, so slugs still resolve), and the sitemap
+      simply omits beat entries.
+    */
+    if (error || !data) {
+      console.error("[beats-repo] failed to load beats from Supabase", error);
+      return [];
+    }
     return data.map(mapRowToBeat);
   }
   return BEATS;
