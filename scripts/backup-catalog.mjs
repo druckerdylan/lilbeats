@@ -22,7 +22,7 @@
  * skipped, so an interrupted run resumes instead of starting over.
  */
 import { createWriteStream } from "node:fs";
-import { mkdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, rename, rm, stat, writeFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
@@ -73,7 +73,20 @@ async function download(bucket, storagePath, destination) {
   const { data, error } = await supabase.storage.from(bucket).download(storagePath);
   if (error) throw new Error(error.message);
   await mkdir(dirname(destination), { recursive: true });
-  await pipeline(Readable.fromWeb(data.stream()), createWriteStream(destination));
+  /*
+    Written to a .partial and renamed only on success. The resume check treats
+    any nonzero file at the final name as done, so a stream that died mid-way
+    (Ctrl-C, network drop) must never leave a truncated file there — it would
+    be silently "skipped" as complete on every subsequent run.
+  */
+  const partial = `${destination}.partial`;
+  try {
+    await pipeline(Readable.fromWeb(data.stream()), createWriteStream(partial));
+    await rename(partial, destination);
+  } catch (err) {
+    await rm(partial, { force: true });
+    throw err;
+  }
   return (await stat(destination)).size;
 }
 

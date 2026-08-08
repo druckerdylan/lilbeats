@@ -9,9 +9,11 @@ import { YoutubeIcon, BeatstarsIcon } from "@/components/shared/social-icons";
 import { BRAND, SOCIAL_LINKS } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  // `absolute` because the string already contains the brand — the layout
+  // template would append " — Lil Beats" a second time.
+  title: { absolute: "Contact Lil Beats — Beats, Mixing & Mastering" },
   description:
-    "Get in touch with Lil Beats for licensing questions, custom production, or mixing & mastering inquiries.",
+    "Questions about licensing, custom production, or a mix? Washington D.C. based, replies within 24–48 hours.",
   alternates: { canonical: "/contact" },
 };
 

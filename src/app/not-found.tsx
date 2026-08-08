@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Kicker } from "@/components/shared/section-heading";
+
+/** Without this the 404 inherits the homepage title — wrong in tabs and SERPs. */
+export const metadata: Metadata = {
+  title: "Page Not Found",
+};
 
 /**
  * Without this, Next serves its built-in 404 — an unstyled white page, which

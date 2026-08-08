@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   // only a receipt for one. Keeping it out of the index also keeps it from
   // outranking /free for the terms /free is actually written to win.
   robots: { index: false, follow: false },
+  // Self-canonical: without this the page inherits the root canonical ("/")
+  // and declares itself a duplicate of the homepage — inert next to noindex,
+  // but wrong, and the same pattern already fixed on the booking confirmation.
+  alternates: { canonical: "/thanks/free" },
 };
 
 export default function FreeStarterPackThanksPage() {

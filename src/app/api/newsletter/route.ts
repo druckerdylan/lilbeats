@@ -43,7 +43,27 @@ export async function POST(req: NextRequest) {
       ? starterPackEmail({ beats: await getStarterPackBeats() })
       : newsletterWelcomeEmail();
 
-  await sendEmail({ to: email, subject, html });
+  /*
+    Resend's SDK reports failure as `{ error }` rather than throwing, and
+    sendEmail returns `{ skipped: true }` when no API key is configured — so
+    without these checks a signup whose email never went out would still be
+    told "check your inbox" and routed to the thanks page.
+  */
+  const sent = await sendEmail({ to: email, subject, html });
+  if ("skipped" in sent && sent.skipped) {
+    console.error("[newsletter] email skipped — RESEND_API_KEY not configured");
+    return NextResponse.json(
+      { error: "We couldn't send the email just now. Please try again shortly." },
+      { status: 500 }
+    );
+  }
+  if ("error" in sent && sent.error) {
+    console.error("[newsletter] send failed", sent.error);
+    return NextResponse.json(
+      { error: "We couldn't send the email just now. Please try again shortly." },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({ success: true });
 }

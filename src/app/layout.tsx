@@ -36,18 +36,16 @@ export const metadata: Metadata = {
 
     INHERITED, and that is the catch: any page that does not set its own
     `alternates` self-canonicalises to the homepage. Every indexable page
-    with a `metadata` export therefore carries its own path — except
-    /portfolio and /mixing-mastering, which are owned by another branch
-    right now and still need `alternates: { canonical: "/portfolio" }` and
-    `{ canonical: "/mixing-mastering" }` adding.
+    with a `metadata` export therefore carries its own path.
   */
   alternates: { canonical: "/" },
   title: {
     default: `${SITE_NAME} — Dark Production. Clean Mixes. Records That Hit.`,
     template: `%s — ${SITE_NAME}`,
   },
+  // 146 chars — the previous 228 truncated in every search result.
   description:
-    "Lil Beats is an independent production house crafting dark, cinematic beats and delivering professional mixing & mastering for serious artists. Instant beat licensing, custom mixdowns, and records built to hit on any system.",
+    "Dark trap, drill and phonk instrumentals for serious artists. Instant licensing from $15, plus mixing and mastering that translates on any system.",
   keywords: [
     "Lil Beats",
     "beats for sale",

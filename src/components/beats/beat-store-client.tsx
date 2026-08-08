@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { Beat } from "@/lib/types";
+import { CardBeat } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,7 @@ import { HudFrame } from "@/components/visuals/hud-frame";
 import { useAudioPlayerStore } from "@/lib/store/player-store";
 import { cn } from "@/lib/utils";
 
-function buildOptions(beats: Beat[]) {
+function buildOptions(beats: CardBeat[]) {
   const genres = Array.from(new Set(beats.map((b) => b.genre))).sort();
   const moods = Array.from(new Set(beats.flatMap((b) => b.mood))).sort();
   const keys = Array.from(new Set(beats.map((b) => b.key))).sort();
@@ -75,7 +75,7 @@ function activeConstraints(
   return rows;
 }
 
-export function BeatStoreClient({ beats }: { beats: Beat[] }) {
+export function BeatStoreClient({ beats }: { beats: CardBeat[] }) {
   const options = useMemo(() => buildOptions(beats), [beats]);
   // The transport docks to the bottom of the viewport while a preview runs,
   // which is exactly where the drawer's action row sits.

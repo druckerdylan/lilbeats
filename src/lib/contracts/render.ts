@@ -154,7 +154,10 @@ export function renderContract(subject: ContractSubject): ContractResult {
   const title =
     kind === "exclusive"
       ? `Exclusive Track Sale Agreement — ${subject.beatTitle}`
-      : `Non-Exclusive ${tier.name} License Agreement — ${subject.beatTitle}`;
+      : // Tier names already end in "License" ("MP3 License", "Unlimited
+        // License"), so appending the word again titled every non-exclusive
+        // agreement "… License License Agreement".
+        `Non-Exclusive ${tier.name.replace(/\s+License$/i, "")} License Agreement — ${subject.beatTitle}`;
 
   return { ok: true, title, body };
 }

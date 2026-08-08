@@ -6,8 +6,8 @@ import { track as trackEvent } from "@/lib/analytics";
 /**
  * What the persistent transport bar needs to render the current track.
  * Optional everywhere — callers that only have an id and a src (the
- * before/after mix players, for instance) simply don't pass it, and the
- * bar stays hidden for those.
+ * portfolio players, for instance) simply don't pass it, and the bar stays
+ * hidden for those.
  */
 export interface NowPlayingTrack {
   title: string;
@@ -17,8 +17,8 @@ export interface NowPlayingTrack {
   /**
    * Catalogue slug. Its presence is what marks this as a real beat rather
    * than a comparison clip, so it doubles as the gate on the `preview_play`
-   * event — the mixing before/after channels and the portfolio players pass
-   * no track at all and are correctly never counted as beat previews.
+   * event — the portfolio players pass no track at all and are correctly
+   * never counted as beat previews.
    */
   slug?: string;
 }

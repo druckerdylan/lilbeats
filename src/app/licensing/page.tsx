@@ -11,8 +11,10 @@ import type { LicenseTier } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Licensing",
-  description: "Beat licensing terms for MP3, WAV, and Stems tiers at Lil Beats.",
+  // `absolute`: 60 chars already — the template's " — Lil Beats" would truncate it.
+  title: { absolute: "Beat Licensing Explained — MP3, Premium, Unlimited, Exclusive" },
+  description:
+    "What each Lil Beats licence covers: streams, copies, videos and stems. MP3 $15, Premium $20, Unlimited $35, Exclusive $140.",
   alternates: { canonical: "/licensing" },
 };
 

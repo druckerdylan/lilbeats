@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getAllBeats } from "@/lib/beats-repo";
+import { toCardBeat } from "@/lib/types";
 import { BeatStoreClient } from "@/components/beats/beat-store-client";
 import { Kicker } from "@/components/shared/section-heading";
 import { Reveal, SplitWords } from "@/components/shared/reveal";
@@ -8,14 +9,24 @@ import { CatalogSpectrum } from "@/components/visuals/catalog-spectrum";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Beats",
-  description:
-    "Browse the full Lil Beats catalog — dark, cinematic instrumentals available for instant MP3, WAV, and stems licensing.",
-  // Overrides the root layout's canonical, which would otherwise point this
-  // page at the homepage. See the note in app/layout.tsx.
-  alternates: { canonical: "/beats" },
-};
+/*
+  generateMetadata rather than a static export so the catalogue count in the
+  description is live — the rule is that the count is a variable, never a
+  hard-coded digit that goes stale the day a beat is imported or retired. The
+  page already revalidates every 60s; this rides the same cache.
+*/
+export async function generateMetadata(): Promise<Metadata> {
+  const count = (await getAllBeats()).length;
+  return {
+    title: "Type Beats For Sale — Dark Trap, Drill & Phonk",
+    description: count
+      ? `Browse ${count} original instrumentals — dark trap, UK drill, phonk and jersey. MP3, WAV and stems licences from $15, delivered instantly.`
+      : "Browse original instrumentals — dark trap, UK drill, phonk and jersey. MP3, WAV and stems licences from $15, delivered instantly.",
+    // Overrides the root layout's canonical, which would otherwise point this
+    // page at the homepage. See the note in app/layout.tsx.
+    alternates: { canonical: "/beats" },
+  };
+}
 
 export default async function BeatsPage() {
   const beats = await getAllBeats();
@@ -106,7 +117,10 @@ export default async function BeatsPage() {
       </header>
 
       <div className="relative z-10">
-        <BeatStoreClient beats={beats} />
+        {/* Projected before the client boundary: the full Beat carries the
+            paid deliverables' storage paths, which must not serialize into
+            the page for every visitor. */}
+        <BeatStoreClient beats={beats.map(toCardBeat)} />
       </div>
     </div>
   );

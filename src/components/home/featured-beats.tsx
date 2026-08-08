@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getAllBeats } from "@/lib/beats-repo";
+import { toCardBeat } from "@/lib/types";
 import { BeatCard } from "@/components/beats/beat-card";
 import { SectionHeading, Kicker } from "@/components/shared/section-heading";
 import { GlitchText } from "@/components/visuals/glitch-text";
@@ -57,13 +58,13 @@ export async function FeaturedBeats() {
         >
           {lead && (
             <RevealItem className="sm:col-span-2 lg:row-span-2">
-              <BeatCard beat={lead} variant="feature" />
+              <BeatCard beat={toCardBeat(lead)} variant="feature" />
             </RevealItem>
           )}
 
           {rest.map((beat) => (
             <RevealItem key={beat.id}>
-              <BeatCard beat={beat} />
+              <BeatCard beat={toCardBeat(beat)} />
             </RevealItem>
           ))}
 

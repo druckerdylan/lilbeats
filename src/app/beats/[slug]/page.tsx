@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { REVIEWS, BEAT_FAQS } from "@/lib/mock-data";
 import { getAllBeats, getBeatBySlug } from "@/lib/beats-repo";
+import { toCardBeat } from "@/lib/types";
 import { AudioPlayer } from "@/components/beats/audio-player";
 import { LicenseTable } from "@/components/beats/license-table";
 import { ExclusiveLicenseDialog } from "@/components/beats/exclusive-license-dialog";
@@ -266,7 +267,7 @@ export default async function BeatPage({
               readout={`${availableTiers.length} Tiers · From ${formatPrice(fromPrice)}`}
               className="bg-charcoal/30"
             >
-              <LicenseTable beat={beat} />
+              <LicenseTable beat={toCardBeat(beat)} />
             </HudFrame>
           </Reveal>
         </div>
@@ -293,7 +294,7 @@ export default async function BeatPage({
             {recommended.map((r, i) => (
               // Alternating drop breaks the four-in-a-row template rhythm.
               <RevealItem key={r.id} className={cn("h-full", i % 2 === 1 && "lg:mt-14")}>
-                <BeatCard beat={r} />
+                <BeatCard beat={toCardBeat(r)} />
               </RevealItem>
             ))}
           </RevealGroup>

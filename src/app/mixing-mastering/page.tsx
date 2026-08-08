@@ -16,9 +16,10 @@ import { MIXING_FAQS } from "@/lib/mock-data";
 import { Reveal } from "@/components/shared/reveal";
 
 export const metadata: Metadata = {
-  title: "Mixing & Mastering",
+  title: "Mixing & Mastering For Rappers & Singers",
   description:
-    "Professional mixing and mastering from Lil Beats — records engineered to translate on every system, with fast turnaround and built-in revisions.",
+    "Professional mixing and mastering for rappers and singers. Mastering $60, full mix and master $150 — two revision rounds included, 2–5 day turnaround.",
+  alternates: { canonical: "/mixing-mastering" },
 };
 
 const SERVICE_WORDS = [

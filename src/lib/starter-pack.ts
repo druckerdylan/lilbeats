@@ -65,10 +65,12 @@ export async function getStarterPackBeats(): Promise<StarterPackBeat[]> {
     const selected = STARTER_PACK_SLUGS.length
       ? // Curated order wins over catalogue order. A slug that no longer
         // resolves (renamed, unpublished) is dropped rather than sending a
-        // dead link, so the pack can come back short — logged below.
-        STARTER_PACK_SLUGS.map((slug) => beats.find((beat) => beat.slug === slug)).filter(
-          (beat) => beat !== undefined
-        )
+        // dead link, so the pack can come back short — logged below. Capped
+        // like the fallback: over-listing slugs must not silently grow the
+        // pack past what the page promises.
+        STARTER_PACK_SLUGS.map((slug) => beats.find((beat) => beat.slug === slug))
+          .filter((beat) => beat !== undefined)
+          .slice(0, STARTER_PACK_SIZE)
       : // `getAllBeats` already orders newest first.
         beats.slice(0, STARTER_PACK_SIZE);
 

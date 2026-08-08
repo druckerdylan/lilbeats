@@ -6,12 +6,12 @@ import { Reveal, SplitWords } from "@/components/shared/reveal";
 import { HudFrame } from "@/components/visuals/hud-frame";
 import { STARTER_PACK_SIZE } from "@/lib/starter-pack";
 
-const TITLE = "The Artist Starter Pack — Five Free Beats";
+const TITLE = "Free Beat Pack — 5 Dark Trap & Drill Instrumentals";
 const DESCRIPTION =
   "Five full-length Lil Beats instrumentals, 320kbps MP3, free. Dark and melodic trap, drill, and phonk — sent straight to your inbox.";
 
 export const metadata: Metadata = {
-  title: "Free Beats",
+  title: { absolute: `${TITLE} | Lil Beats` },
   description: DESCRIPTION,
   alternates: { canonical: "/free" },
   openGraph: {

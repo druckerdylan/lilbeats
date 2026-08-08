@@ -19,9 +19,13 @@ import { Reveal, RevealGroup, RevealItem, SplitWords } from "@/components/shared
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Credits",
+  // Must not promise releases that aren't listed: the portfolio is empty until
+  // real placements land, and the empty state points visitors at the catalogue.
+  // Stops being a placeholder the moment there is one credit.
   description:
-    "Production, mixing, and mastering work from Lil Beats — real releases across Spotify, Apple Music, YouTube, and SoundCloud.",
+    "Released work produced, mixed and mastered by Lil Beats. Credits are listed here as they clear.",
+  alternates: { canonical: "/portfolio" },
 };
 
 const YEARS = PORTFOLIO_ITEMS.map((item) => item.year);

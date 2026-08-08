@@ -3,7 +3,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LICENSE_TIERS } from "@/lib/licensing";
-import { Beat, LicenseId, LicenseTier } from "@/lib/types";
+import { CardBeat, LicenseId, LicenseTier } from "@/lib/types";
 import { useCartStore } from "@/lib/store/cart-store";
 import { formatPrice } from "@/lib/format";
 import { priceForLicense } from "@/lib/licensing";
@@ -37,7 +37,7 @@ function FeatureList({ features }: { features: string[] }) {
   );
 }
 
-export function LicenseTable({ beat }: { beat: Beat }) {
+export function LicenseTable({ beat }: { beat: CardBeat }) {
   const addItem = useCartStore((s) => s.addItem);
   const hasLicense = useCartStore((s) => s.hasLicense);
   const availableTiers = LICENSE_TIERS.filter((tier) =>

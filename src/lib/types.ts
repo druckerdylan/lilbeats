@@ -52,6 +52,28 @@ export interface Beat {
   createdAt: string;
 }
 
+/**
+ * The projection of `Beat` that is allowed to cross into client components.
+ *
+ * Everything passed to a `"use client"` component is serialized into the
+ * page's flight payload, readable by any visitor in view-source. The full
+ * `Beat` carries the storage paths of the paid deliverables (master MP3, WAV,
+ * stems) — those buckets are private so the paths alone don't grant access,
+ * but they have no business shipping to every browser, and dropping them plus
+ * the other never-read fields also trims each serialized beat.
+ */
+export type CardBeat = Omit<
+  Beat,
+  "fullMp3Url" | "wavUrl" | "stemsUrl" | "basePrice" | "favorites"
+>;
+
+/** Apply at every server→client boundary; the type alone strips nothing. */
+export function toCardBeat(beat: Beat): CardBeat {
+  const { fullMp3Url, wavUrl, stemsUrl, basePrice, favorites, ...card } = beat;
+  void fullMp3Url, void wavUrl, void stemsUrl, void basePrice, void favorites;
+  return card;
+}
+
 export interface Review {
   id: string;
   beatId: string;

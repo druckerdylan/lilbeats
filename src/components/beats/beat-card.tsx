@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Pause, Play, ShoppingCart } from "lucide-react";
-import { Beat } from "@/lib/types";
+import { CardBeat } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FavoriteButton } from "@/components/beats/favorite-button";
@@ -32,7 +32,7 @@ export function BeatCard({
   variant = "tile",
   className,
 }: {
-  beat: Beat;
+  beat: CardBeat;
   variant?: "tile" | "feature";
   className?: string;
 }) {
