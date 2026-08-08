@@ -46,3 +46,8 @@ next-env.d.ts
 
 # Local Stripe CLI binary (35MB, not source)
 /bin/stripe
+
+# Local catalogue backup: gigabytes of masters, WAVs and stems pulled out of
+# Supabase by `pnpm backup-catalog`. This repo is public — these must never
+# be committed. They are the backup, not the source of truth.
+/catalog-backup
