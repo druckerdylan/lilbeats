@@ -18,7 +18,7 @@ import { Reveal } from "@/components/shared/reveal";
 export const metadata: Metadata = {
   title: "Mixing & Mastering For Rappers & Singers",
   description:
-    "Professional mixing and mastering for rappers and singers. Mastering $60, full mix and master $150 — two revision rounds included, 2–5 day turnaround.",
+    "Professional mixing and mastering for rappers and singers. Mastering $60, full mix and master $150 — three revision rounds included, 2–5 day turnaround.",
   alternates: { canonical: "/mixing-mastering" },
 };
 

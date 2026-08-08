@@ -291,7 +291,7 @@ export const MIXING_FAQS: FaqItem[] = [
   {
     question: "How many revisions are included?",
     answer:
-      "Every package includes two rounds of revisions. Beyond that, additional rounds are $15 each and capped at $30 total — once you have hit that ceiling, revisions keep going at no extra cost until the mix is right.",
+      "Every package includes three rounds of revisions. If you still want changes after those, ask and you get up to two more at no extra cost — five rounds in total. Beyond that the work is quoted separately, and payments already made are non-refundable.",
   },
   {
     question: "What's your turnaround time?",

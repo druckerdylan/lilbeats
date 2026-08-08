@@ -32,8 +32,8 @@ export const SERVICE_TIERS: ServiceTier[] = [
     features: [
       "Stereo mastering from a finished mix",
       "Loudness optimized for streaming (or vinyl on request)",
-      "2 rounds of revisions included",
-      "Extra rounds $15, capped at $30",
+      "3 rounds of revisions included",
+      "Up to 2 more on request — 5 total",
       "Delivered as WAV + MP3",
     ],
     turnaround: "2–3 business days",
@@ -48,8 +48,8 @@ export const SERVICE_TIERS: ServiceTier[] = [
       "Full mix from raw vocal & instrumental stems",
       "Mastering included",
       "Vocal tuning available as an add-on",
-      "2 rounds of revisions included",
-      "Extra rounds $15, capped at $30",
+      "3 rounds of revisions included",
+      "Up to 2 more on request — 5 total",
       "Delivered as WAV + MP3 + mix session on request",
     ],
     turnaround: "3–5 business days",
@@ -58,9 +58,11 @@ export const SERVICE_TIERS: ServiceTier[] = [
 ];
 
 /*
-  The cap is the point: most projects settle inside the two included rounds, so
-  the ceiling costs little to honour and removes the fear of an open-ended bill
-  that makes people hesitate to ask for the change they actually want.
+  Bounded on purpose. Three rounds cover almost every project, and the two on
+  request cost little to honour while removing the hesitation to ask for the
+  change someone actually wants — but the total is capped at five, so a single
+  difficult client cannot draw unlimited hours against a one-off fee. No
+  refunds: the deliverables are files, and they cannot be returned.
 */
 export const REVISION_POLICY =
-  "Every package includes two rounds of revisions after your first draft. Additional rounds are $15 each and capped at $30 total — past that, revisions are free until the mix is right. Rush delivery (24–48 hours) is available on request, based on current availability.";
+  "Every package includes three rounds of revisions after your first draft. If you still want changes, ask and you get up to two more — five rounds in total, at no extra cost. Rush delivery (24–48 hours) is available on request, based on current availability.";

@@ -60,10 +60,11 @@ const CLAUSES: LegalClause[] = [
       <p>
         By submitting a mixing &amp; mastering request, you confirm that you
         own the rights to all files provided, or have explicit
-        permission to use them. Each service package includes two
-        rounds of revisions; additional revisions may incur a fee.
-        Turnaround times are estimates and may vary based on current
-        project volume.
+        permission to use them. Each service package includes three
+        rounds of revisions, and up to two further rounds on request at
+        no extra cost — five in total. Work beyond that is quoted
+        separately. Turnaround times are estimates and may vary based on
+        current project volume.
       </p>
     ),
   },
@@ -72,11 +73,13 @@ const CLAUSES: LegalClause[] = [
     title: "Payments & Refunds",
     body: (
       <p>
-        All beat license purchases are digital goods delivered
-        instantly and are final once files have been downloaded.
-        Mixing &amp; mastering deposits are non-refundable once work has
-        begun, but are fully refundable if cancelled before work starts.
-        If you believe you were charged in error, contact us at{" "}
+        All sales are final. Beat licences are digital goods delivered
+        instantly, and mixing &amp; mastering fees are non-refundable —
+        the revision rounds described above are how a mix is brought to
+        where you want it. A mixing &amp; mastering booking cancelled
+        before any work has started is the one exception, and is
+        refunded in full. If you believe you were charged in error,
+        contact us at{" "}
         <a href={`mailto:${BRAND.email}`} className={LINK}>
           {BRAND.email}
         </a>

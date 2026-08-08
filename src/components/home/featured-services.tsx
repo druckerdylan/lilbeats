@@ -127,7 +127,7 @@ export function FeaturedServices() {
             See full service details
             <ArrowRight />
           </Button>
-          <p className="u-meta text-smoke">Two revision rounds included</p>
+          <p className="u-meta text-smoke">Up to five revision rounds</p>
         </Reveal>
       </div>
     </section>

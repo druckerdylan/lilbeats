@@ -31,7 +31,7 @@ const BENEFITS = [
     number: "04",
     title: "Built-In Revisions",
     description:
-      "Two rounds of revisions are included on every package, so the final version actually matches your vision.",
+      "Three rounds are included on every package, and you can ask for two more — five in total, so the final version actually matches your vision.",
   },
 ];
 
