@@ -45,7 +45,7 @@ admins ? pass(`ADMIN_EMAILS (${admins.split(",").length} address(es))`)
 
 if (!process.env.STRIPE_SECRET_KEY) warn("STRIPE_SECRET_KEY not set", "Checkout will error until this exists. Fine for importing beats.");
 if (!process.env.RESEND_API_KEY) warn("RESEND_API_KEY not set", "Receipts are skipped and logged instead. Fine for now.");
-if (!process.env.NEXT_PUBLIC_SITE_URL) warn("NEXT_PUBLIC_SITE_URL not set", "Falls back to https://lilbeats.com — must be correct in production.");
+if (!process.env.NEXT_PUBLIC_SITE_URL) warn("NEXT_PUBLIC_SITE_URL not set", "Falls back to https://www.lilbeatsofficial.com — must be correct in production.");
 
 if (!url || !service) {
   console.log("\nCannot continue without the URL and service-role key.\n");

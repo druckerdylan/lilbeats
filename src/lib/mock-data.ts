@@ -1,4 +1,4 @@
-import { Beat, BeforeAfterExample, FaqItem, PortfolioItem, Review, Testimonial } from "@/lib/types";
+import { Beat, FaqItem, PortfolioItem, Review, Testimonial } from "@/lib/types";
 import { unsplash } from "@/lib/unsplash";
 
 export const BEATS: Beat[] = [
@@ -284,27 +284,6 @@ export const TESTIMONIALS: Testimonial[] = [];
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [];
 
-export const BEFORE_AFTER_EXAMPLES: BeforeAfterExample[] = [
-  {
-    id: "ba-001",
-    title: "Raw Vocal Take → Final Master",
-    genre: "Trap Soul",
-    beforeAudioUrl: "/audio/previews/amber-skyline.mp3",
-    afterAudioUrl: "/audio/previews/midnight-cartier.mp3",
-    description:
-      "A rough phone-recorded vocal session cleaned up, tuned, mixed against the instrumental, and mastered for streaming loudness targets.",
-  },
-  {
-    id: "ba-002",
-    title: "Muddy Rough Mix → Club-Ready Master",
-    genre: "Trap",
-    beforeAudioUrl: "/audio/previews/concrete-halo.mp3",
-    afterAudioUrl: "/audio/previews/vantablack.mp3",
-    description:
-      "Low end rebalanced, vocal presence recovered from a boomy room recording, and a final master built to hit hard on club systems.",
-  },
-];
-
 export const MIXING_FAQS: FaqItem[] = [
   {
     question: "What files do you need to start mixing my song?",
@@ -314,7 +293,7 @@ export const MIXING_FAQS: FaqItem[] = [
   {
     question: "How many revisions are included?",
     answer:
-      "Every mixing and mastering package includes two rounds of revisions. Additional revision rounds can be added for a flat fee if you need further changes beyond that.",
+      "Every package includes two rounds of revisions. Beyond that, additional rounds are $15 each and capped at $30 total — once you have hit that ceiling, revisions keep going at no extra cost until the mix is right.",
   },
   {
     question: "What's your turnaround time?",

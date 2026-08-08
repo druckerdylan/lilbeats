@@ -83,15 +83,6 @@ export interface PortfolioItem {
   year: number;
 }
 
-export interface BeforeAfterExample {
-  id: string;
-  title: string;
-  genre: string;
-  beforeAudioUrl: string;
-  afterAudioUrl: string;
-  description: string;
-}
-
 export interface CartLineItem {
   id: string;
   beatId: string;

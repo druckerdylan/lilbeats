@@ -1,10 +1,19 @@
 export const SITE_NAME = "Lil Beats";
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lilbeats.com";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.lilbeatsofficial.com";
 
 export const BRAND = {
   tagline: "Dark Production. Clean Mixes. Records That Hit.",
-  email: "contact@lilbeats.com",
-  supportEmail: "support@lilbeats.com",
+  /*
+    The real, monitored inbox. Every mailto on the site, the reply-to on every
+    outbound email, and the destination for contact-form and mixing-request
+    notifications all resolve to this one constant — so it is the only place
+    the address is written down.
+
+    The previous contact@lilbeats.com and support@lilbeats.com were on a domain
+    nobody here owns: mail sent to them went nowhere, silently.
+  */
+  email: "lilbeats070@gmail.com",
   location: "Washington, D.C.",
   hours: "Mon – Fri, 9am – 6pm ET",
   responseTime: "Within 24–48 hours",

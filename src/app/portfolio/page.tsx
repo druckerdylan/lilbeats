@@ -7,7 +7,6 @@ import {
   coverNeedsDuotone,
 } from "@/components/portfolio/portfolio-card";
 import { AudioPlayer } from "@/components/beats/audio-player";
-import { BeforeAfter } from "@/components/mixing/before-after";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Kicker, SectionHeading } from "@/components/shared/section-heading";
@@ -282,10 +281,6 @@ export default function PortfolioPage() {
           </RevealGroup>
         </section>
       )}
-
-      <div className="seam-top">
-        <BeforeAfter />
-      </div>
 
       <FinalCta />
     </>

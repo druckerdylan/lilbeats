@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { MixingHero } from "@/components/mixing/mixing-hero";
 import { MixingBenefits } from "@/components/mixing/mixing-benefits";
-import { BeforeAfter } from "@/components/mixing/before-after";
 import { Testimonials } from "@/components/home/testimonials";
 import { PricingSection } from "@/components/mixing/pricing-section";
 import { FinalCta } from "@/components/home/final-cta";
@@ -35,7 +34,6 @@ export default function MixingMasteringPage() {
     <>
       <MixingHero />
       <MixingBenefits />
-      <BeforeAfter />
 
       <section className="relative py-10" aria-hidden>
         <div className="hairline-dim" />
@@ -51,7 +49,7 @@ export default function MixingMasteringPage() {
           <div className="lg:col-span-4">
             <Reveal>
               <SectionHeading
-                chapter="04"
+                chapter="03"
                 eyebrow="Questions"
                 title={
                   <>

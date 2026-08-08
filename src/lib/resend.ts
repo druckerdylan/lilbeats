@@ -16,7 +16,13 @@ function getResend(): Resend {
   return resendClient;
 }
 
-const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL ?? `${SITE_NAME} <orders@lilbeats.com>`;
+/*
+  The From address must be on a domain verified with Resend — a free-mail
+  address like the one in BRAND.email is rejected outright. So mail is SENT as
+  orders@lilbeatsofficial.com and REPLIES are steered to BRAND.email below.
+*/
+const FROM_ADDRESS =
+  process.env.RESEND_FROM_EMAIL ?? `${SITE_NAME} <orders@lilbeatsofficial.com>`;
 
 export async function sendEmail(params: {
   to: string | string[];

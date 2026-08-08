@@ -16,7 +16,7 @@ export function PricingSection() {
       <div className="mx-auto max-w-[1600px] px-5 py-24 sm:px-8 lg:px-14 lg:py-36">
         <Reveal>
           <SectionHeading
-            chapter="03"
+            chapter="02"
             eyebrow="Pricing"
             title={
               <>
