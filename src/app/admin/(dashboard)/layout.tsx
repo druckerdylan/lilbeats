@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdminUser } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
 import { AdminNavList, AdminNavRail } from "@/components/admin/admin-nav";
 
@@ -9,11 +9,15 @@ export default async function AdminDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  /*
+    The allowlist, not merely "is signed in". These pages read customer names,
+    emails, phone numbers and order history through the service-role client,
+    so any authenticated Supabase user reaching them would see all of it — and
+    Supabase projects ship with sign-up enabled. The write APIs already gate on
+    requireAdminUser; the pages that display the data must not be laxer than
+    the routes that change it.
+  */
+  const user = await requireAdminUser();
   if (!user) {
     redirect("/admin/login");
   }

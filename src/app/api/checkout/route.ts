@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 import { getStripe } from "@/lib/stripe";
 import { getBeatById } from "@/lib/beats-repo";
@@ -17,6 +18,15 @@ const bodySchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  // Creates Stripe sessions and fans out one DB query per cart line.
+  const limited = rateLimit(`checkout:${clientKey(req)}`, { limit: 30, windowMs: 3600000 });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
+    );
+  }
+
   const parsed = bodySchema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid cart payload." }, { status: 400 });

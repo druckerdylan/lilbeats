@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/beats-repo";
@@ -19,6 +20,15 @@ const schema = z.object({
 const STARTER_PACK_SOURCE = "free-starter-pack";
 
 export async function POST(req: NextRequest) {
+  // Sends mail on the metered Resend quota to an arbitrary address.
+  const limited = rateLimit(`newsletter:${clientKey(req)}`, { limit: 5, windowMs: 3600000 });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
+    );
+  }
+
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });

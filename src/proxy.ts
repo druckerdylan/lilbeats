@@ -41,7 +41,19 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  /*
+    Signed in is not the same as allowed. Supabase projects ship with sign-up
+    enabled and the anon key is public, so gating on user-existence alone would
+    let anyone who registers reach a dashboard full of customer PII. The layout
+    re-checks this too — the proxy is the cheap early exit, not the only lock.
+  */
+  const allowed = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+  const email = user?.email?.toLowerCase();
+
+  if (!user || allowed.length === 0 || !email || !allowed.includes(email)) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 

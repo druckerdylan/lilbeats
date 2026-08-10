@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { createAdminClient, STORAGE_BUCKETS } from "@/lib/supabase/admin";
@@ -41,6 +42,15 @@ const MAX_FILE_BYTES = 100 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 500 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
+  // Sends two emails and writes uploaded files to storage.
+  const limited = rateLimit(`mixing-request:${clientKey(req)}`, { limit: 5, windowMs: 3600000 });
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } }
+    );
+  }
+
   const formData = await req.formData();
   const raw = Object.fromEntries(formData.entries());
   // Several files arrive under one key, so getAll — get() would silently keep
