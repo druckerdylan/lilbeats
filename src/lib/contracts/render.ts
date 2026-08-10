@@ -95,6 +95,14 @@ export function renderContract(subject: ContractSubject): ContractResult {
     SITE_NAME,
     SITE_URL,
     LICENSE_NAME: tier.name,
+    /*
+      The bare tier, for the "Non-Exclusive ___ License Agreement" heading.
+      Tier names already end in "License" ("MP3 License", "Unlimited
+      License"), so interpolating the full name there produced "MP3 License
+      License Agreement" on the face of every non-exclusive contract issued.
+      The so-called-"{LICENSE_NAME}"-basis clause still wants the full name.
+    */
+    LICENSE_LABEL: tier.name.replace(/\s+License$/i, ""),
     FILE_TYPE: tier.formatLabel,
     PRODUCT_TITLE: subject.beatTitle,
     PRODUCT_PRICE: price,

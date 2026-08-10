@@ -27,9 +27,9 @@ const PLATFORM_CLAUSE = `By using the Service, both parties acknowledge and acce
 
 /**
  * MP3 License and Premium License. Identical text in the originals; the tier is
- * carried by {LICENSE_NAME}, {FILE_TYPE}, {PRODUCT_PRICE} and the caps.
+ * carried by {LICENSE_NAME}/{LICENSE_LABEL}, {FILE_TYPE}, {PRODUCT_PRICE} and the caps.
  */
-export const STANDARD_NON_EXCLUSIVE = `This Non-Exclusive {LICENSE_NAME} License Agreement (the "Agreement"), having been made on and effective as of {CONTRACT_DATE} (the "Effective Date") by and between {PRODUCT_OWNER_FULLNAME} p/k/a {PRODUCER_ALIAS} (the "Producer" or "Licensor"); and {CUSTOMER_FULLNAME} residing at {CUSTOMER_ADDRESS} ("You" or "Licensee"), sets forth the terms and conditions of the Licensee's use, and the rights granted in, the Producer's instrumental music file entitled {PRODUCT_TITLE} (the "Beat") in consideration for Licensee's payment of {PRODUCT_PRICE} (the "License Fee"), on a so-called "{LICENSE_NAME}" basis.
+export const STANDARD_NON_EXCLUSIVE = `This Non-Exclusive {LICENSE_LABEL} License Agreement (the "Agreement"), having been made on and effective as of {CONTRACT_DATE} (the "Effective Date") by and between {PRODUCT_OWNER_FULLNAME} p/k/a {PRODUCER_ALIAS} (the "Producer" or "Licensor"); and {CUSTOMER_FULLNAME} residing at {CUSTOMER_ADDRESS} ("You" or "Licensee"), sets forth the terms and conditions of the Licensee's use, and the rights granted in, the Producer's instrumental music file entitled {PRODUCT_TITLE} (the "Beat") in consideration for Licensee's payment of {PRODUCT_PRICE} (the "License Fee"), on a so-called "{LICENSE_NAME}" basis.
 
 This Agreement is issued solely in connection with and for Licensee's use of the Beat pursuant and subject to all terms and conditions set forth herein.
 
@@ -120,7 +120,7 @@ Miscellaneous: This Agreement constitutes the entire understanding of the partie
  * BeatStars removed as an indemnified non-party, and the platform paragraph
  * repointed at the Lil Beats site.
  */
-export const UNLIMITED_NON_EXCLUSIVE = `This Non-Exclusive {LICENSE_NAME} License Agreement (the "Agreement"), having been made on and effective as of {CONTRACT_DATE} (the "Effective Date") by and between {PRODUCT_OWNER_FULLNAME} p/k/a {PRODUCER_ALIAS} (the "Producer" or "Licensor"); and {CUSTOMER_FULLNAME} residing at {CUSTOMER_ADDRESS} ("You" or "Licensee"), sets forth the terms and conditions of the Licensee's use, and the rights granted in, the instrumental music file(s) entitled {PRODUCT_TITLE} (the "Track") in consideration for Licensee's payment of {PRODUCT_PRICE} (the "License Fee"). For convenience, the so-called "Track" shall also mean all files comprising such Track, individually and collectively.
+export const UNLIMITED_NON_EXCLUSIVE = `This Non-Exclusive {LICENSE_LABEL} License Agreement (the "Agreement"), having been made on and effective as of {CONTRACT_DATE} (the "Effective Date") by and between {PRODUCT_OWNER_FULLNAME} p/k/a {PRODUCER_ALIAS} (the "Producer" or "Licensor"); and {CUSTOMER_FULLNAME} residing at {CUSTOMER_ADDRESS} ("You" or "Licensee"), sets forth the terms and conditions of the Licensee's use, and the rights granted in, the instrumental music file(s) entitled {PRODUCT_TITLE} (the "Track") in consideration for Licensee's payment of {PRODUCT_PRICE} (the "License Fee"). For convenience, the so-called "Track" shall also mean all files comprising such Track, individually and collectively.
 
 This Agreement is issued solely in connection with and for Licensee's use of the Track pursuant and subject to all terms and conditions set forth herein.
 
