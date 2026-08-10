@@ -16,7 +16,13 @@ export const STARTER_PACK_SIZE = 5;
  * net, not the plan: a curated pack is the one chance to lead with the five
  * beats that best represent the catalogue.
  */
-export const STARTER_PACK_SLUGS: string[] = [];
+export const STARTER_PACK_SLUGS: string[] = [
+  "bali-central-cee-x-uk-drill-type-beat-x7f20b", // BALI | CENTRAL CEE X UK DRILL TYPE BEAT
+  "judgement-keem-x-metro-freestyle-beat-1o14ep", // JUDGEMENT | KEEM X METRO FREESTYLE BEAT
+  "enigma-future-x-drake-x-metro-type-beat-thw86v", // ENIGMA | FUTURE X DRAKE X METRO TYPE BEAT
+  "shake-that-metro-x-21-savage-type-beat-2k3bak", // SHAKE THAT | METRO X 21 SAVAGE TYPE BEAT
+  "villainz-future-x-southside-type-beat-v2gnub", // VILLAINZ | FUTURE X SOUTHSIDE TYPE BEAT
+];
 
 export interface StarterPackBeat {
   title: string;
