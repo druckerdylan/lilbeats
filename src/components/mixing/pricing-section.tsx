@@ -27,9 +27,11 @@ export function PricingSection() {
           />
         </Reveal>
 
-        {/* The recommended tier takes the wider column — the grid itself
-            argues for it before any badge does. */}
-        <RevealGroup className="mt-16 grid grid-cols-1 gap-6 lg:mt-20 lg:grid-cols-12 lg:gap-8">
+        {/* Even columns. With two tiers the recommended one took the wider
+            column and the grid made the argument before any badge did; at
+            three that trick turns into a 7+5+5 overflow, so the glowing edge
+            and the badge carry it instead. */}
+        <RevealGroup className="mt-16 grid grid-cols-1 gap-6 lg:mt-20 lg:grid-cols-3 lg:gap-8">
           {SERVICE_TIERS.map((tier) => {
             const card = (
               <div
@@ -99,10 +101,7 @@ export function PricingSection() {
             );
 
             return (
-              <RevealItem
-                key={tier.id}
-                className={cn(tier.highlighted ? "lg:col-span-7" : "lg:col-span-5")}
-              >
+              <RevealItem key={tier.id}>
                 {/* Only the recommended tier turns under the pointer. Tilting
                     both would flatten the distinction the wider column and the
                     glowing edge are there to make. */}

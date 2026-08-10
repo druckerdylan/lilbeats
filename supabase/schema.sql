@@ -140,6 +140,8 @@ create table if not exists public.mixing_requests (
   needs_vocal_tuning boolean not null default false,
   needs_stem_cleanup boolean not null default false,
   file_link text,
+  -- Newline-separated when a submission carries several files. Storage keys
+  -- are generated ids, so they never contain a newline themselves.
   project_file_path text,
   additional_notes text,
   confirms_ownership boolean not null default false,

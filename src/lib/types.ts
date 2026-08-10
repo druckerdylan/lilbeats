@@ -109,15 +109,19 @@ export interface MixingRequestPayload {
   phone: string;
   songTitle: string;
   genre: string;
-  serviceRequested: "mixing" | "mastering" | "mixing-mastering" | "vocal-tuning" | "other";
+  serviceRequested:
+    | "mixing"
+    | "mastering"
+    | "mixing-mastering"
+    | "mixing-mastering-premium"
+    | "vocal-tuning"
+    | "other";
   numberOfSongs: number;
   referenceTracks: string;
   desiredSound: string;
   currentMixProblems: string;
   deadline: string;
   budget: string;
-  needsVocalTuning: boolean;
-  needsStemCleanup: boolean;
   fileLink: string;
   additionalNotes: string;
   confirmsOwnership: boolean;

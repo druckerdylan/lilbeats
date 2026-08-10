@@ -36,15 +36,20 @@ const schema = z.object({
   phone: z.string().min(1, "Required"),
   songTitle: z.string().min(1, "Required"),
   genre: z.string().min(1, "Required"),
-  serviceRequested: z.enum(["mixing", "mastering", "mixing-mastering", "vocal-tuning", "other"]),
+  serviceRequested: z.enum([
+    "mixing",
+    "mastering",
+    "mixing-mastering",
+    "mixing-mastering-premium",
+    "vocal-tuning",
+    "other",
+  ]),
   numberOfSongs: z.number().int().min(1),
   referenceTracks: z.string(),
   desiredSound: z.string(),
   currentMixProblems: z.string(),
   deadline: z.string(),
   budget: z.string(),
-  needsVocalTuning: z.boolean(),
-  needsStemCleanup: z.boolean(),
   fileLink: z.string(),
   additionalNotes: z.string(),
   confirmsOwnership: z.boolean().refine((v) => v === true, {
@@ -57,7 +62,8 @@ type FormValues = z.infer<typeof schema>;
 const SERVICE_OPTIONS: { value: FormValues["serviceRequested"]; label: string }[] = [
   { value: "mixing", label: "Mixing" },
   { value: "mastering", label: "Mastering" },
-  { value: "mixing-mastering", label: "Mixing & Mastering" },
+  { value: "mixing-mastering", label: "Mixing & Mastering (up to 12 stems)" },
+  { value: "mixing-mastering-premium", label: "Mixing & Mastering Premium (unlimited stems)" },
   { value: "vocal-tuning", label: "Vocal Tuning" },
   { value: "other", label: "Other" },
 ];
@@ -95,9 +101,14 @@ const CHECKBOX = "size-4 shrink-0 rounded-none border-bone/30";
   label is stretched to fill the row and `FormLabel`'s `htmlFor` does the
   toggling.
 */
-const CHECK_ROW =
-  "flex flex-row items-center gap-3.5 space-y-0 border border-bone/12 bg-charcoal/40 p-5";
-const CHECK_LABEL = "u-meta flex-1 cursor-pointer text-smoke";
+
+/** Human byte size for the upload plate's readout. */
+function formatBytes(n: number): string {
+  if (n < 1024) return `${n} B`;
+  if (n < 1048576) return `${(n / 1024).toFixed(0)} KB`;
+  if (n < 1073741824) return `${(n / 1048576).toFixed(1)} MB`;
+  return `${(n / 1073741824).toFixed(2)} GB`;
+}
 
 function Act({
   index,
@@ -131,7 +142,8 @@ export function MixingRequestForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedService = searchParams.get("service");
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
+  const totalBytes = files.reduce((n, f) => n + f.size, 0);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -142,13 +154,12 @@ export function MixingRequestForm() {
       phone: "",
       songTitle: "",
       genre: "",
-      serviceRequested:
-        preselectedService === "mastering" ||
-        preselectedService === "mixing-mastering" ||
-        preselectedService === "vocal-production"
-          ? preselectedService === "vocal-production"
-            ? "vocal-tuning"
-            : (preselectedService as FormValues["serviceRequested"])
+      // Driven by the ?service= the pricing cards link with, so the tier a
+      // buyer clicked is the tier the form opens on.
+      serviceRequested: SERVICE_OPTIONS.some((o) => o.value === preselectedService)
+        ? (preselectedService as FormValues["serviceRequested"])
+        : preselectedService === "vocal-production"
+          ? "vocal-tuning"
           : "mixing-mastering",
       numberOfSongs: 1,
       referenceTracks: "",
@@ -156,13 +167,15 @@ export function MixingRequestForm() {
       currentMixProblems: "",
       deadline: "",
       budget: "",
-      needsVocalTuning: false,
-      needsStemCleanup: false,
       fileLink: "",
       additionalNotes: "",
       confirmsOwnership: false,
     },
   });
+
+  // Mastering takes a finished stereo bounce, not a stem folder — asking for
+  // stems there invites the wrong upload and a round-trip to correct it.
+  const isMasteringOnly = form.watch("serviceRequested") === "mastering";
 
   async function onSubmit(values: FormValues) {
     try {
@@ -170,7 +183,8 @@ export function MixingRequestForm() {
       Object.entries(values).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
-      if (file) formData.append("projectFile", file);
+      // One entry per file under the same key; the route reads them with getAll.
+      for (const f of files) formData.append("projectFile", f);
 
       const res = await fetch("/api/mixing-request", { method: "POST", body: formData });
       const data = await res.json();
@@ -408,7 +422,7 @@ export function MixingRequestForm() {
                 <FormItem>
                   <FormLabel className={LABEL}>Budget</FormLabel>
                   <FormControl>
-                    <Input className={FIELD} placeholder="e.g. $150" {...field} />
+                    <Input className={FIELD} placeholder="e.g. $100" {...field} />
                   </FormControl>
                   <FormMessage className={MESSAGE} />
                 </FormItem>
@@ -416,40 +430,6 @@ export function MixingRequestForm() {
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="needsVocalTuning"
-              render={({ field }) => (
-                <FormItem className={CHECK_ROW}>
-                  <FormControl>
-                    <Checkbox
-                      className={CHECKBOX}
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className={CHECK_LABEL}>Need vocal tuning?</FormLabel>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="needsStemCleanup"
-              render={({ field }) => (
-                <FormItem className={CHECK_ROW}>
-                  <FormControl>
-                    <Checkbox
-                      className={CHECKBOX}
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormLabel className={CHECK_LABEL}>Need stem cleanup?</FormLabel>
-                </FormItem>
-              )}
-            />
-          </div>
         </Act>
 
         <Act index="05" title="The Files">
@@ -458,6 +438,14 @@ export function MixingRequestForm() {
               <label className="u-meta mb-3 block text-smoke" htmlFor="project-file">
                 Project File Upload
               </label>
+              {/* States the expected upload for the chosen service. Sending
+                 stems to a mastering booking is the single most common wrong
+                 upload, and it costs a round-trip to correct. */}
+              <p className="mb-3 text-sm leading-relaxed text-smoke/80">
+                {isMasteringOnly
+                  ? "Send your final stereo mix bounce as a WAV — no stems for mastering — plus any reference tracks."
+                  : "Send your stems or session, plus any reference tracks."}
+              </p>
               {/* Corner brackets turn the dashed plate into an intake port —
                  the one element in this form that genuinely is a piece of
                  equipment rather than a text field. */}
@@ -468,7 +456,7 @@ export function MixingRequestForm() {
                 <UploadCloud
                   className={cn(
                     "size-6 transition-colors duration-300 group-hover:text-ember",
-                    file ? "text-ember" : "text-smoke"
+                    files.length ? "text-ember" : "text-smoke"
                   )}
                   aria-hidden
                 />
@@ -478,20 +466,28 @@ export function MixingRequestForm() {
                 <span
                   className={cn(
                     "u-meta max-w-full break-words",
-                    file ? "text-bone" : "text-smoke"
+                    files.length ? "text-bone" : "text-smoke"
                   )}
                   aria-live="polite"
                 >
-                  {file ? file.name : "Click to upload stems, session, or reference audio"}
+                  {files.length
+                    ? files.map((f) => f.name).join(" · ")
+                    : isMasteringOnly
+                      ? "Click to upload your WAV mix bounce and reference audio"
+                      : "Click to upload stems, session, or reference audio"}
                 </span>
                 <span className="u-meta text-bone/25">
-                  {file ? "Replace file" : "100MB max"}
+                  {files.length
+                    ? `${files.length} file${files.length > 1 ? "s" : ""} · ${formatBytes(totalBytes)} · click to replace`
+                    : "Select several at once · 100MB per file"}
                 </span>
                 <input
                   id="project-file"
                   type="file"
+                  multiple
+                  accept="audio/*,.wav,.aif,.aiff,.mp3,.flac,.zip"
                   className="hidden"
-                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
                 />
               </label>
             </div>

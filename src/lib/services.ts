@@ -6,6 +6,8 @@ export interface ServiceTier {
   description: string;
   features: string[];
   turnaround: string;
+  /** Max stems this tier accepts. Absent = no cap (or not stem-based, e.g. mastering). */
+  stemLimit?: number;
   highlighted?: boolean;
 }
 
@@ -18,9 +20,11 @@ export interface ServiceTier {
     Mixing + master    entry-level package $75–210, independent $260+.
                        Typical entry-to-independent rate ≈ $165.
 
-  Both tiers sit $15 under those midpoints. Note this is a raise, not a cut: the
-  previous $30 / $75 sat at or below the absolute floor of the entry-level band,
-  which reads as demo-grade work rather than as a discount.
+  Mixing splits on stem count because that is what actually drives the work: a
+  twelve-stem vocal session and a forty-stem session are not the same job, and
+  charging one price for both either overcharges the first or underprices the
+  second. Mastering is not tiered — it takes one stereo file, so there are no
+  stems to count.
 */
 export const SERVICE_TIERS: ServiceTier[] = [
   {
@@ -41,19 +45,38 @@ export const SERVICE_TIERS: ServiceTier[] = [
   {
     id: "mixing-mastering",
     name: "Mixing & Mastering",
-    price: 150,
+    price: 100,
     unit: "per song",
+    stemLimit: 12,
     description: "Full mix from raw stems through a final master, built to sit right next to any major release.",
     features: [
+      "Up to 12 stems",
       "Full mix from raw vocal & instrumental stems",
+      "Vocal tuning and stem cleanup included",
       "Mastering included",
-      "Vocal tuning available as an add-on",
       "3 rounds of revisions included",
       "Up to 2 more on request — 5 total",
       "Delivered as WAV + MP3 + mix session on request",
     ],
     turnaround: "3–5 business days",
     highlighted: true,
+  },
+  {
+    id: "mixing-mastering-premium",
+    name: "Mixing & Mastering Premium",
+    price: 140,
+    unit: "per song",
+    description: "The same mix and master with no cap on stem count — for full band sessions, dense arrangements, and stacked vocal productions.",
+    features: [
+      "Unlimited stems",
+      "Full mix from raw vocal & instrumental stems",
+      "Vocal tuning and stem cleanup included",
+      "Mastering included",
+      "3 rounds of revisions included",
+      "Up to 2 more on request — 5 total",
+      "Delivered as WAV + MP3 + mix session on request",
+    ],
+    turnaround: "3–5 business days",
   },
 ];
 

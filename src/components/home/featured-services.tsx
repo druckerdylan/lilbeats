@@ -10,7 +10,15 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/shared/reveal";
 const ICONS = {
   mastering: Sparkles,
   "mixing-mastering": Sliders,
+  "mixing-mastering-premium": Sliders,
 };
+
+/*
+  Falls back rather than returning undefined. Keying icons off tier ids means a
+  new tier renders `<undefined>`, which is not a type error — it fails at
+  render time and took the whole homepage prerender down with it.
+*/
+const iconFor = (id: string) => ICONS[id as keyof typeof ICONS] ?? Sliders;
 
 export function FeaturedServices() {
   return (
@@ -44,11 +52,11 @@ export function FeaturedServices() {
           the element, which would shear the highlighted panel's neon edge.
         */}
         <RevealGroup
-          className="mt-20 grid grid-cols-1 gap-14 lg:mt-28 lg:grid-cols-2 lg:gap-10"
+          className="mt-20 grid grid-cols-1 gap-14 lg:mt-28 lg:grid-cols-3 lg:gap-10"
           stagger={0.12}
         >
           {SERVICE_TIERS.map((tier, index) => {
-            const Icon = ICONS[tier.id as keyof typeof ICONS];
+            const Icon = iconFor(tier.id);
             return (
               <RevealItem key={tier.id} variant="rise" className="h-full">
                 {/*

@@ -15,15 +15,20 @@ const schema = z.object({
   phone: z.string().min(1),
   songTitle: z.string().min(1),
   genre: z.string().min(1),
-  serviceRequested: z.enum(["mixing", "mastering", "mixing-mastering", "vocal-tuning", "other"]),
+  serviceRequested: z.enum([
+    "mixing",
+    "mastering",
+    "mixing-mastering",
+    "mixing-mastering-premium",
+    "vocal-tuning",
+    "other",
+  ]),
   numberOfSongs: z.coerce.number().int().min(1),
   referenceTracks: z.string().optional().default(""),
   desiredSound: z.string().optional().default(""),
   currentMixProblems: z.string().optional().default(""),
   deadline: z.string().optional().default(""),
   budget: z.string().optional().default(""),
-  needsVocalTuning: z.stringbool().default(false),
-  needsStemCleanup: z.stringbool().default(false),
   fileLink: z.string().optional().default(""),
   additionalNotes: z.string().optional().default(""),
   confirmsOwnership: z.stringbool().refine((v) => v === true, {
@@ -32,11 +37,17 @@ const schema = z.object({
 });
 
 const MAX_FILE_BYTES = 100 * 1024 * 1024;
+/** Ceiling across a whole submission, so 20 stems cannot become 2GB. */
+const MAX_TOTAL_BYTES = 500 * 1024 * 1024;
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const raw = Object.fromEntries(formData.entries());
-  const projectFile = formData.get("projectFile");
+  // Several files arrive under one key, so getAll — get() would silently keep
+  // only the first and quietly drop the rest of someone's session.
+  const projectFiles = formData
+    .getAll("projectFile")
+    .filter((f): f is File => f instanceof File && f.size > 0);
 
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
@@ -49,24 +60,48 @@ export async function POST(req: NextRequest) {
   const payload: MixingRequestPayload = parsed.data;
   let projectFilePath: string | null = null;
 
-  if (projectFile instanceof File && projectFile.size > 0) {
-    if (projectFile.size > MAX_FILE_BYTES) {
-      return NextResponse.json({ error: "File is too large (100MB max)." }, { status: 400 });
+  if (projectFiles.length) {
+    const oversized = projectFiles.find((f) => f.size > MAX_FILE_BYTES);
+    if (oversized) {
+      return NextResponse.json(
+        { error: `"${oversized.name}" is too large (100MB max per file).` },
+        { status: 400 }
+      );
+    }
+    const total = projectFiles.reduce((n, f) => n + f.size, 0);
+    if (total > MAX_TOTAL_BYTES) {
+      return NextResponse.json(
+        { error: "Those files come to more than 500MB in total. Send a Drive or Dropbox link instead." },
+        { status: 400 }
+      );
     }
 
     if (isSupabaseConfigured()) {
       const supabase = createAdminClient();
-      const path = `${nanoid()}-${projectFile.name}`;
-      const buffer = Buffer.from(await projectFile.arrayBuffer());
-      const { error } = await supabase.storage
-        .from(STORAGE_BUCKETS.mixingUploads)
-        .upload(path, buffer, { contentType: projectFile.type || "application/octet-stream" });
+      const stored: string[] = [];
 
-      if (!error) {
-        projectFilePath = path;
-      } else {
-        console.error("[mixing-request] file upload failed", error);
+      for (const file of projectFiles) {
+        /*
+          The filename is attacker-controlled and becomes a storage key, so it
+          is stripped to a leaf and reduced to a safe character set — a name
+          carrying `../` would otherwise decide where the object lands.
+        */
+        const safe = file.name.split(/[\\/]/).pop()!.replace(/[^\w.\-]+/g, "_").slice(-120);
+        const path = `${nanoid()}-${safe}`;
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const { error } = await supabase.storage
+          .from(STORAGE_BUCKETS.mixingUploads)
+          .upload(path, buffer, { contentType: file.type || "application/octet-stream" });
+
+        if (error) {
+          console.error(`[mixing-request] upload failed for ${file.name}`, error);
+        } else {
+          stored.push(path);
+        }
       }
+
+      // Newline-separated: one text column, and the paths never contain one.
+      projectFilePath = stored.length ? stored.join("\n") : null;
     } else {
       console.warn("[mixing-request] Supabase not configured — skipping file upload.");
     }
@@ -88,8 +123,6 @@ export async function POST(req: NextRequest) {
       current_mix_problems: payload.currentMixProblems,
       deadline: payload.deadline,
       budget: payload.budget,
-      needs_vocal_tuning: payload.needsVocalTuning,
-      needs_stem_cleanup: payload.needsStemCleanup,
       file_link: payload.fileLink,
       project_file_path: projectFilePath,
       additional_notes: payload.additionalNotes,
