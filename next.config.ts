@@ -20,6 +20,14 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   headers: async () => [{ source: "/(.*)", headers: SECURITY_HEADERS }],
   images: {
+    /*
+      Next 16 raised this default from 60s to 4 hours, which is sensible for
+      images that never change but wrong here: covers are replaced in place at
+      the same storage path, so a swapped cover stays invisible to anyone who
+      had already loaded the old one. Supabase serves these with `no-cache`
+      anyway, so the upstream is authoritative and the revalidation is cheap.
+    */
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
         protocol: "https",
