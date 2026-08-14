@@ -72,7 +72,21 @@ export async function FeaturedBeats() {
               hole becomes the way out to the full catalogue — an index panel
               with the catalogue's real counters on it. */}
           <RevealItem className="min-h-[16rem]">
-            <div className="hud-corners relative flex h-full flex-col justify-between gap-8 border border-bone/10 bg-pitch/60 p-7 transition-colors duration-300 hover:border-ember/35">
+            {/*
+              The whole panel is the way out to the catalogue, not just the
+              button. The stretched `Link` covers the card via an inset
+              pseudo-element — the same pattern the beat cards use — so any
+              dead space is clickable while the anchor stays a single, named
+              target for assistive tech. The button below is the visible
+              affordance; `pointer-events-none` keeps it from stealing the
+              click from the stretched link that already owns the whole card.
+            */}
+            <div className="hud-corners group relative flex h-full flex-col justify-between gap-8 border border-bone/10 bg-pitch/60 p-7 transition-colors duration-300 hover:border-ember/35">
+              <Link
+                href="/beats"
+                aria-label={`View all ${beats.length} beats`}
+                className="absolute inset-0 z-10"
+              />
               <div className="flex items-start justify-between gap-4">
                 <Kicker tone="smoke">Keep Digging</Kicker>
                 <span className="u-meta shrink-0 tabular-nums text-smoke/60">
@@ -85,7 +99,11 @@ export async function FeaturedBeats() {
                   In Rotation
                 </p>
                 <div className="mt-7">
-                  <Button variant="cinemaGhost" size="cinemaSm" render={<Link href="/beats" />}>
+                  <Button
+                    variant="cinemaGhost"
+                    size="cinemaSm"
+                    className="pointer-events-none transition-colors duration-300 group-hover:border-ember/50 group-hover:text-ember"
+                  >
                     View all beats
                     <ArrowRight />
                   </Button>
