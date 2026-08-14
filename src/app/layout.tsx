@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { SITE_URL, SITE_NAME } from "@/lib/constants";
 import { Navbar } from "@/components/layout/navbar";
@@ -126,6 +127,19 @@ export default function RootLayout({
           two in step if this ever changes.
         */}
         <Analytics />
+        {/*
+          Google Analytics 4. Gated on NEXT_PUBLIC_GA_ID so nothing loads until
+          the measurement ID is set in the environment — no gtag script, no
+          cookies, no privacy claim to answer for — and it turns on with a
+          rebuild once the ID lands. NEXT_PUBLIC_* is inlined at build, so set
+          it in Vercel and redeploy.
+
+          Unlike the cookieless Vercel analytics above, GA4 does set cookies;
+          the /privacy copy will need a line about it once this is live.
+        */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );
