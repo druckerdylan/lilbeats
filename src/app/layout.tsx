@@ -128,17 +128,16 @@ export default function RootLayout({
         */}
         <Analytics />
         {/*
-          Google Analytics 4. Gated on NEXT_PUBLIC_GA_ID so nothing loads until
-          the measurement ID is set in the environment — no gtag script, no
-          cookies, no privacy claim to answer for — and it turns on with a
-          rebuild once the ID lands. NEXT_PUBLIC_* is inlined at build, so set
-          it in Vercel and redeploy.
+          Google Analytics 4. The measurement ID is not a secret — it ships in
+          the page for every GA-enabled site — so it lives in the code with an
+          env override, which means GA works on deploy without a dashboard step.
 
-          Unlike the cookieless Vercel analytics above, GA4 does set cookies;
-          the /privacy copy will need a line about it once this is live.
+          Gated on production so `pnpm dev` never pollutes the property with
+          local traffic. Unlike the cookieless Vercel analytics above, GA4 sets
+          cookies — /privacy says so.
         */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        {process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? "G-8KCJWQGESV"} />
         )}
       </body>
     </html>

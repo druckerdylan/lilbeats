@@ -30,22 +30,22 @@ const CLAUSES: LegalClause[] = [
     title: "Information We Collect",
     /*
       This clause used to claim "standard web analytics" while the site ran
-      none at all. It now runs Vercel Web Analytics, so the paragraph
-      describes what that specific product actually does — see
-      vercel.com/docs/analytics/privacy-policy. If the analytics provider
-      ever changes, this text and the third-party list below change with it.
+      none at all. It now runs Vercel Web Analytics (cookieless) alongside
+      Google Analytics 4 (which does set cookies), so the paragraph describes
+      what both actually do. If the analytics providers ever change, this
+      text, the cookies clause, and the third-party list below change with it.
     */
     body: (
       <>
         <p>
           When you browse {SITE_NAME}, we collect aggregate usage data through
-          Vercel Web Analytics: which pages were viewed, the referring site,
-          approximate location (country, region, city), and device, browser,
-          and operating system type. We also record a small number of
-          anonymous events — a beat preview being played, a license being
-          added to the cart, a form being submitted successfully — so we know
-          which parts of the site are useful. These events never include your
-          email address or any other detail that identifies you.
+          Vercel Web Analytics and Google Analytics 4: which pages were viewed,
+          the referring site, approximate location (country, region, city), and
+          device, browser, and operating system type. We also record a small
+          number of anonymous events — a beat preview being played, a license
+          being added to the cart, a form being submitted successfully — so we
+          know which parts of the site are useful. These events never include
+          your email address or any other detail that identifies you.
         </p>
         <p>
           This analytics data is not tied to a name, an account, or a stored
@@ -97,8 +97,12 @@ const CLAUSES: LegalClause[] = [
         {SITE_NAME} uses your browser&rsquo;s local storage to remember
         items in your cart and your favorited beats between visits. This
         data stays on your device and is not sold or shared with third
-        parties. Our analytics sets no cookies of its own and does not use
-        third-party cookies, so there is no tracking cookie to opt out of.
+        parties. Vercel Web Analytics is cookieless. Google Analytics 4 sets
+        its own cookies to measure visits and traffic sources; these are used
+        only for aggregate analytics and are not sold or shared. You can opt
+        out with Google&rsquo;s browser add-on at
+        tools.google.com/dlpage/gaoptout, or by blocking cookies in your
+        browser.
       </p>
     ),
   },
@@ -109,8 +113,8 @@ const CLAUSES: LegalClause[] = [
       <p>
         We rely on trusted third-party providers to operate the site,
         including Stripe (payments), Supabase (database and file
-        storage), Resend (transactional email), and Vercel (hosting and
-        the aggregate analytics described above). Each provider
+        storage), Resend (transactional email), Vercel (hosting and
+        cookieless analytics), and Google (Analytics 4). Each provider
         processes your data only as needed to perform their respective
         service.
       </p>
